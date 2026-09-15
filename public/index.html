@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Facturación</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div id="appShell" class="shell" hidden>
+  <aside>
+    <div class="img-logo">
+      <img src="img/logo2.png"/>
+    </div>
+    <div class="btn-nav">
+      <button class="nav active" data-v="nueva">Nueva factura</button>
+      <button class="nav" data-v="historial">Historial</button>
+      <button class="nav" data-v="clientes">Clientes fiscales</button>
+      <button class="nav" data-v="usuarios">Usuarios</button>
+      <button class="nav" data-v="reportes">Reportes</button>
+      <button class="nav" data-v="config">Configuración</button>
+    </div>
+
+    <div class="account-box">
+      <div class="item-name">
+          <strong id="usuarioActual">Usuario</strong>
+          <small id="rolActual">—</small>
+      </div>
+      <button id="btnCerrarSesion" type="button" class="logout-button"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+    <!-- <small>PAC simulado</small> -->
+  </aside>
+
+  <button type="button" id="btnView" onclick="viewMenu()">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <nav class="nav-item hidden">
+    <div class="img-logo">
+      <img src="img/logo2.png"/>
+    </div>
+
+    <div class="nav-item-btn">
+      <button class="nav active" data-v="nueva">Nueva factura</button>
+      <button class="nav" data-v="historial">Historial</button>
+      <button class="nav" data-v="clientes">Clientes fiscales</button>
+      <button class="nav" data-v="usuarios">Usuarios</button>
+      <button class="nav" data-v="reportes">Reportes</button>
+      <button class="nav" data-v="config">Configuración</button>
+    </div>
+
+    <div class="account-box">
+      <div class="item-name">
+        <strong id="usuarioActual">Usuario</strong>
+        <small id="rolActual">—</small>
+      </div>
+
+      <button id="btnCerrarSesion" type="button" class="logout-button">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <section id="nueva" class="view active">
+      <h2>Nueva factura</h2>
+      <div class="card">
+        <div class="inline">
+          <input id="buscarFolio" placeholder="WA-000123 / WEB-000101">
+          <button id="btnBuscarPedido" type="button">Buscar pedido</button>
+        </div>
+
+        <form id="form">
+          <div class="grid">
+            <label>Origen
+              <select id="origen">
+                <option>WHATSAPP</option><option>ALMACEN</option><option>BAZAR</option><option>ECOMMERCE</option><option>MANUAL</option>
+              </select>
+            </label>
+            <label>Folio<input id="folio"></label>
+            <label>Razón social
+              <div class="inline compact">
+                <input id="razon" value="PUBLICO EN GENERAL">
+                <button id="buscarFiscalFactura" type="button" class="ghost">Buscar fiscal</button>
+              </div>
+            </label>
+            <label>RFC<input id="rfc" value="" placeholder="XAXX010101000"></label>
+            <label>CP fiscal<input id="cp" placeholder="54700" value=""></label>
+            <label>Régimen
+              <select id="regimen">
+                <option value="616">616 - Sin obligaciones fiscales</option>
+                <option value="612">612 - Persona física actividad empresarial</option>
+                <option value="601">601 - General de Ley Personas Morales</option>
+              </select>
+            </label>
+            <label>Uso CFDI
+              <select id="uso">
+                <option value="S01">S01 - Sin efectos fiscales</option>
+                <option value="G03">G03 - Gastos en general</option>
+              </select>
+            </label>
+            <label>Correo<input id="email" type="email"></label>
+            <label>Forma de pago
+              <select id="formaPago">
+                <option value="01">01 - Efectivo</option>
+                <option value="03" selected>03 - Transferencia</option>
+                <option value="04">04 - Tarjeta crédito</option>
+                <option value="28">28 - Tarjeta débito</option>
+                <option value="99">99 - Por definir</option>
+              </select>
+            </label>
+            <label>Método de pago
+              <select id="metodoPago">
+                <option value="PUE">PUE - Pago en una sola exhibición</option>
+                <option value="PPD">PPD - Pago en parcialidades o diferido</option>
+              </select>
+            </label>
+
+            <label>IVA
+              <div class="tax-control">
+                <label class="switch-line">
+                  <input type="checkbox" id="aplicarIva" checked>
+                  <span>Aplicar IVA</span>
+                </label>
+                <select id="tasaIva">
+                  <option value="0.16" selected>16%</option>
+                  <option value="0.08">8%</option>
+                  <option value="0">0%</option>
+                </select>
+              </div>
+            </label>
+
+          </div>
+
+          <div class="bar">
+            <h3>Conceptos</h3>
+            <button id="add" type="button" class="ghost">+ Agregar manualmente</button>
+          </div>
+          <div id="conceptos"></div>
+          <div id="totales" class="stats"></div>
+          <div class="saveFactura">
+            <button id="btnGuardarFactura">Guardar borrador</button>
+          </div>
+          <p id="mensaje"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="historial" class="view">
+      <h2>Historial de facturas</h2>
+      <div class="card">
+        <input id="buscarHistorial" placeholder="Buscar por folio, cliente o RFC">
+        <div id="historialTabla"></div>
+      </div>
+    </section>
+
+    <section id="clientes" class="view">
+      <h2>Clientes fiscales</h2>
+      <div class="card split">
+         <form id="clienteFiscalForm">
+          <label>Tipo de persona
+            <select id="cfTipoPersona"><option value="FISICA">Persona física</option><option value="MORAL">Persona moral</option></select>
+          </label>
+          <label>Razón social<input id="cfRazon"></label>
+          <label>RFC<input id="cfRfc"></label>
+          <label>CP fiscal<input id="cfCp"></label>
+          <label>Régimen
+            <select id="cfRegimen">
+              <option value="612">612 - Persona física actividad empresarial</option>
+              <option value="616">616 - Sin obligaciones fiscales</option>
+              <option value="601">601 - General de Ley Personas Morales</option>
+            </select>
+          </label>
+          <label>Uso CFDI
+            <select id="cfUso"><option value="G03">G03 - Gastos en general</option><option value="S01">S01 - Sin efectos fiscales</option></select>
+          </label>
+          <label>Correo<input id="cfEmail" type="email"></label>
+          <div class="saveFactura item-client">
+            <button class="btn-save-client">Guardar cliente</button>
+          </div>
+          <p id="clienteFiscalMensaje"></p>
+        </form>
+        <div>
+          <div class="inline">
+            <input id="buscarClienteFiscal" placeholder="RFC, nombre o correo">
+            <button id="btnBuscarClienteFiscal" type="button" class="ghost">Buscar</button>
+          </div>
+          <div id="clientesLista"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="usuarios" class="view">
+      <h2>Usuarios</h2>
+      <div class="card">
+        <p>Usuarios autorizados en Supabase Authentication.</p>
+        <div id="usuariosLista"></div>
+      </div>
+    </section>
+
+    <section id="reportes" class="view">
+      <h2>Reportes</h2>
+      <div id="reporteCards" class="stats"></div>
+      <div class="card"><h3>Facturas por origen</h3><div id="reporteOrigen"></div></div>
+    </section>
+
+    <section id="config" class="view">
+      <h2>Configuración fiscal</h2>
+      <form id="configFiscalForm" class="card">
+        <p>Configura los datos del emisor. No ingreses certificados ni contraseñas en esta sección.</p>
+        <div class="grid">
+          <label>Razón social<input id="cfgRazon" required></label>
+          <label>RFC<input id="cfgRfc" maxlength="13" required></label>
+          <label>Régimen fiscal<input id="cfgRegimen" placeholder="601" required></label>
+          <label>CP de expedición<input id="cfgCp" maxlength="5" required></label>
+          <label>Serie<input id="cfgSerie" value="F" maxlength="10" required></label>
+          <label>Versión CFDI<input value="4.0" disabled></label>
+          <label>Exportación<select id="cfgExportacion"><option value="01">01 - No aplica</option><option value="02">02 - Definitiva</option><option value="03">03 - Temporal</option><option value="04">04 - Definitiva con clave distinta de A1</option></select></label>
+          <label>Ambiente<select id="cfgAmbiente"><option value="PRUEBAS">Pruebas</option><option value="PRODUCCION">Producción</option></select></label>
+          <label>PAC<input id="cfgPac" value="PENDIENTE" readonly></label>
+        </div>
+        <div class="item-save-config">
+          <button id="btnGuardarConfig" type="submit">Guardar configuración</button>
+        </div>
+        <p id="configMensaje"></p>
+      </form>
+    </section>
+  </main>
+</div>
+
+<div id="exitoModal" class="modal success-modal" hidden role="dialog" aria-modal="true" aria-labelledby="exitoTitulo">
+  <div id="exitoBackdrop" class="modal-backdrop"></div>
+  <div class="success-panel">
+    <div class="success-icon" aria-hidden="true">✓</div>
+    <p class="success-eyebrow">Registro completado</p>
+    <h2 id="exitoTitulo">Factura generada exitosamente</h2>
+    <p>La información se guardó correctamente y el formulario está listo para una nueva factura.</p>
+    <div class="success-folio">
+      <span>Folio de seguimiento</span>
+      <strong id="exitoFolio">—</strong>
+    </div>
+    <div class="success-summary">
+      <div><span>Cliente</span><strong id="exitoCliente">—</strong></div>
+      <div><span>Total</span><strong id="exitoTotal">—</strong></div>
+    </div>
+    <div class="success-actions">
+      <button id="btnVerFacturaCreada" type="button" class="ghost">Ver factura</button>
+      <button id="btnNuevaFactura" type="button">Generar otra factura</button>
+    </div>
+  </div>
+</div>
+<script type="module" src="/app.js"></script>
+
+<div id="facturaModal" class="modal" hidden>
+  <div id="facturaBackdrop" class="modal-backdrop"></div>
+  <div class="modal-panel">
+    <div class="modal-toolbar no-print">
+      <button id="btnCerrarFactura" type="button" class="ghost">Cerrar</button>
+      <div class="modal-actions">
+        <button id="btnXmlPreview" type="button" class="ghost">XML</button>
+        <button id="btnImprimirFactura" type="button">Imprimir / Guardar PDF</button>
+      </div>
+    </div>
+    <article id="facturaPrint" class="invoice-print">
+      <header class="invoice-header">
+        <div>
+          <div class="invoice-brand">NOVENTIA</div>
+          <div class="invoice-emisor">
+            <strong>EMPRESA DE PRUEBA SA DE CV</strong><br>
+            RFC: AAA010101AAA<br>
+            Régimen fiscal: 601<br>
+            Lugar de expedición: 54700
+          </div>
+        </div>
+        <div class="invoice-titlebox">
+          <div class="invoice-title">FACTURA</div>
+          <div>Serie: <strong>F</strong></div>
+          <div>Folio: <strong id="pvFolio">-</strong></div>
+          <div>Fecha: <strong id="pvFecha">-</strong></div>
+          <div>UUID: <strong id="pvUuid">PENDIENTE</strong></div>
+        </div>
+      </header>
+
+      <section class="invoice-section">
+        <h3>Datos del receptor</h3>
+        <div class="invoice-grid">
+          <div><span>Razón social</span><strong id="pvRazon">-</strong></div>
+          <div><span>RFC</span><strong id="pvRfc">-</strong></div>
+          <div><span>Código postal</span><strong id="pvCp">-</strong></div>
+          <div><span>Régimen fiscal</span><strong id="pvRegimen">-</strong></div>
+          <div><span>Uso CFDI</span><strong id="pvUso">-</strong></div>
+          <div><span>Correo</span><strong id="pvEmail">-</strong></div>
+        </div>
+      </section>
+
+      <section class="invoice-section">
+        <h3>Conceptos</h3>
+        <table class="invoice-table">
+          <thead>
+            <tr>
+              <th>Cant.</th><th>Clave</th><th>Descripción</th><th>Unidad</th><th>P. unitario</th><th>Importe</th>
+            </tr>
+          </thead>
+          <tbody id="pvConceptos"></tbody>
+        </table>
+      </section>
+
+      <section class="invoice-summary">
+        <div class="payment-data">
+          <div><span>Forma de pago</span><strong id="pvFormaPago">-</strong></div>
+          <div><span>Método de pago</span><strong id="pvMetodoPago">-</strong></div>
+          <div><span>Moneda</span><strong>MXN</strong></div>
+          <div><span>IVA</span><strong id="pvIvaEstado">-</strong></div>
+          <div><span>Origen</span><strong id="pvOrigen">-</strong></div>
+        </div>
+        <div class="totals-box">
+          <div><span>Subtotal</span><strong id="pvSubtotal">$0.00</strong></div>
+          <div><span>IVA</span><strong id="pvIva">$0.00</strong></div>
+          <div class="grand-total"><span>Total</span><strong id="pvTotal">$0.00</strong></div>
+        </div>
+      </section>
+
+      <section class="invoice-fiscal">
+        <div class="qr-placeholder"><strong>QR</strong><small>Se genera con PAC real</small></div>
+        <div class="fiscal-lines">
+          <div>No. certificado emisor: <strong>PENDIENTE</strong></div>
+          <div>No. certificado SAT: <strong>PENDIENTE</strong></div>
+          <div>Fecha certificación: <strong id="pvFechaTimbrado">PENDIENTE</strong></div>
+          <div>Sello CFDI: <code>PENDIENTE DE PAC REAL</code></div>
+          <div>Sello SAT: <code>PENDIENTE DE PAC REAL</code></div>
+          <div>Cadena original: <code>PENDIENTE DE PAC REAL</code></div>
+        </div>
+      </section>
+
+      <footer class="invoice-footer">Representación impresa de un CFDI · Entorno de pruebas</footer>
+    </article>
+  </div>
+</div>
+<script src="https://kit.fontawesome.com/702f509feb.js" crossorigin="anonymous"></script>
+</body>
+</html>

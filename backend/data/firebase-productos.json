@@ -1,0 +1,44 @@
+[
+  {
+    "Folio": "WA-000123",
+    "Fecha": "2026-09-02",
+    "Cliente": "PUBLICO EN GENERAL",
+    "Clave": "SKU-001",
+    "Producto": "Falda corta para mujer",
+    "Costo unitario original": 350,
+    "Descuento %": 0,
+    "Costo unitario con descuento": 350,
+    "Cantidad": 1,
+    "Subtotal": 350,
+    "Unidad": "Pieza",
+    "Clave unidad SAT": "H87"
+  },
+  {
+    "Folio": "WA-000123",
+    "Fecha": "2026-09-02",
+    "Cliente": "PUBLICO EN GENERAL",
+    "Clave": "SKU-002",
+    "Producto": "Blusa casual",
+    "Costo unitario original": 250,
+    "Descuento %": 0,
+    "Costo unitario con descuento": 250,
+    "Cantidad": 2,
+    "Subtotal": 500,
+    "Unidad": "Pieza",
+    "Clave unidad SAT": "H87"
+  },
+  {
+    "Folio": "BAZ-000045",
+    "Fecha": "2026-09-02",
+    "Cliente": "MARIA LOPEZ",
+    "Clave": "SKU-010",
+    "Producto": "Organizador para hogar",
+    "Costo unitario original": 180,
+    "Descuento %": 0,
+    "Costo unitario con descuento": 180,
+    "Cantidad": 1,
+    "Subtotal": 180,
+    "Unidad": "Pieza",
+    "Clave unidad SAT": "H87"
+  }
+]

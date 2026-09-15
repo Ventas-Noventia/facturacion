@@ -1,0 +1,11 @@
+{
+  "name": "facturacion-dinamica-v1",
+  "version": "1.15.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node backend/server.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": { "node": ">=18" }
+}

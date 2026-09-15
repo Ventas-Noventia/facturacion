@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Iniciar sesión · Facturación</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="login-view">
+    <div class="login-card">
+      <div class="login-mark">N</div>
+      <p class="login-brand">NOVENTIA</p>
+      <h2>Facturación</h2>
+      <p class="login-copy">Ingresa con tu cuenta para continuar.</p>
+      <form id="loginForm">
+        <label>Correo electrónico
+          <input id="loginEmail" type="email" autocomplete="username" required autofocus>
+        </label>
+        <label>Contraseña
+          <input id="loginPassword" type="password" autocomplete="current-password" required>
+        </label>
+        <button id="loginButton" type="submit">Iniciar sesión</button>
+        <p id="loginMensaje" class="form-message" role="alert"></p>
+      </form>
+    </div>
+  </main>
+  <script type="module" src="/login.js"></script>
+</body>
+</html>

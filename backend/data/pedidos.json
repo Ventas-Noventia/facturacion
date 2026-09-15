@@ -1,0 +1,76 @@
+[
+  {
+    "folio": "WA-000123",
+    "origen": "WHATSAPP",
+    "cliente": {
+      "razonSocial": "PUBLICO EN GENERAL",
+      "rfc": "XAXX010101000",
+      "codigoPostal": "54700",
+      "regimenFiscal": "616",
+      "email": "cliente.demo@example.com"
+    },
+    "productos": [
+      {
+        "sku": "SKU-001",
+        "descripcion": "Falda corta para mujer",
+        "cantidad": 1,
+        "precioUnitario": 350,
+        "tasaIva": 0.16
+      },
+      {
+        "sku": "SKU-002",
+        "descripcion": "Blusa casual",
+        "cantidad": 2,
+        "precioUnitario": 250,
+        "tasaIva": 0.16
+      }
+    ]
+  },
+  {
+    "folio": "BAZ-000045",
+    "origen": "BAZAR",
+    "cliente": {
+      "razonSocial": "MARIA LOPEZ",
+      "rfc": "LOPM900101AB1",
+      "codigoPostal": "54720",
+      "regimenFiscal": "612",
+      "email": "maria@example.com"
+    },
+    "productos": [
+      {
+        "sku": "SKU-010",
+        "descripcion": "Organizador para hogar",
+        "cantidad": 1,
+        "precioUnitario": 180,
+        "tasaIva": 0.16
+      }
+    ]
+  },
+  {
+    "folio": "ALM-000008",
+    "origen": "ALMACEN",
+    "cliente": {
+      "razonSocial": "JUAN PEREZ",
+      "rfc": "PEPJ850101AA1",
+      "codigoPostal": "54000",
+      "regimenFiscal": "612",
+      "email": "juan@example.com"
+    },
+    "productos": [
+      {
+        "sku": "SKU-021",
+        "descripcion": "Herramienta multiusos",
+        "cantidad": 1,
+        "precioUnitario": 420,
+        "tasaIva": 0.16
+      },
+      {
+        "sku": "SKU-022",
+        "descripcion": "Caja organizadora",
+        "cantidad": 3,
+        "precioUnitario": 95,
+        "tasaIva": 0.16
+      }
+    ]
+  }
+]

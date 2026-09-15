@@ -1,0 +1,13 @@
+[
+  {
+    "id": "CLI-001",
+    "tipoPersona": "FISICA",
+    "razonSocial": "MARIA LOPEZ",
+    "rfc": "LOPM900101AB1",
+    "codigoPostal": "54720",
+    "regimenFiscal": "612",
+    "usoCfdi": "G03",
+    "email": "maria@example.com",
+    "activo": true
+  }
+]

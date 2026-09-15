@@ -1,0 +1,17 @@
+import fs from "node:fs";
+import path from "node:path";
+
+export function loadEnv(file=path.resolve(".env")) {
+  if(!fs.existsSync(file)) return;
+  const content=fs.readFileSync(file,"utf8");
+  for(const raw of content.split(/\r?\n/)) {
+    const line=raw.trim();
+    if(!line || line.startsWith("#")) continue;
+    const separator=line.indexOf("=");
+    if(separator<1) continue;
+    const key=line.slice(0,separator).trim();
+    let value=line.slice(separator+1).trim();
+    if((value.startsWith('"')&&value.endsWith('"'))||(value.startsWith("'")&&value.endsWith("'"))) value=value.slice(1,-1);
+    if(process.env[key]===undefined) process.env[key]=value;
+  }
+}

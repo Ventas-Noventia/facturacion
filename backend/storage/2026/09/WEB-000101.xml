@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante
+  xmlns:cfdi="http://www.sat.gob.mx/cfd/4"
+  xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital"
+  Version="4.0"
+  Serie="FN"
+  Folio="WEB-000101"
+  Fecha="2026-09-14T19:16:25.365414+00:00"
+  FormaPago="03"
+  SubTotal="2847.30"
+  Moneda="MXN"
+  Total="3302.88"
+  TipoDeComprobante="I"
+  Exportacion="01"
+  MetodoPago="PUE"
+  LugarExpedicion="53490">
+  <cfdi:Emisor Rfc="MALE950717M65" Nombre="NOVENTIA S.C. DE A.C." RegimenFiscal="601"/>
+  <cfdi:Receptor
+    Rfc="PELM830202LL2"
+    Nombre="Laura Hernández"
+    DomicilioFiscalReceptor="53490"
+    RegimenFiscalReceptor="616"
+    UsoCFDI="S01"/>
+  <cfdi:Conceptos>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="EC-001" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Bolsa pastel" ValorUnitario="449.10" Importe="449.10" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="449.10" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="71.86"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="EC-002" Cantidad="2" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Organizador compacto" ValorUnitario="250.00" Importe="500.00" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="500.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="80.00"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="EC-005" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Bolsa pastel" ValorUnitario="449.10" Importe="449.10" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="449.10" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="71.86"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="EC-004" Cantidad="2" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Organizador compacto" ValorUnitario="250.00" Importe="500.00" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="500.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="80.00"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="EC-008" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Bolsa pastel" ValorUnitario="449.10" Importe="449.10" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="449.10" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="71.86"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="EC-007" Cantidad="2" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Organizador compacto" ValorUnitario="250.00" Importe="500.00" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="500.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="80.00"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+  </cfdi:Conceptos>
+  <cfdi:Impuestos TotalImpuestosTrasladados="455.58">
+    <cfdi:Traslados>
+      <cfdi:Traslado Base="2847.30" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="455.58"/>
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital
+      Version="1.1"
+      UUID="MOCK-1789413406580"
+      FechaTimbrado="2026-09-14T19:16:46.579Z"
+      RfcProvCertif="AAA010101AAA"
+      SelloCFD="SELLO_MOCK"
+      NoCertificadoSAT="00001000000000000000"
+      SelloSAT="SELLO_SAT_MOCK"/>
+  </cfdi:Complemento>
+</cfdi:Comprobante>

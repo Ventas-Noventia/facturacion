@@ -1,0 +1,9 @@
+[
+  {
+    "id": "USR-001",
+    "nombre": "Administrador",
+    "email": "admin@local.test",
+    "rol": "ADMIN",
+    "activo": true
+  }
+]

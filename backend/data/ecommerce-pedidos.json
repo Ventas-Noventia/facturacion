@@ -1,0 +1,76 @@
+[
+  {
+    "orderId": "WEB-000101",
+    "createdAt": "2026-09-03T09:30:00-06:00",
+    "status": "paid",
+    "customer": {
+      "name": "Laura Hernández",
+      "email": "laura@example.com"
+    },
+    "shipping": {
+      "type": "domicilio",
+      "location": "Cuautitlán Izcalli"
+    },
+    "items": [
+      {
+        "sku": "EC-001",
+        "name": "Bolsa pastel",
+        "qty": 1,
+        "unitPrice": 499,
+        "discountPercent": 10,
+        "unit": "Pieza",
+        "satUnitCode": "H87"
+      },
+      {
+        "sku": "EC-002",
+        "name": "Organizador compacto",
+        "qty": 2,
+        "unitPrice": 250,
+        "discountPercent": 0,
+        "unit": "Pieza",
+        "satUnitCode": "H87"
+      },
+            {
+        "sku": "EC-005",
+        "name": "Bolsa pastel",
+        "qty": 1,
+        "unitPrice": 499,
+        "discountPercent": 10,
+        "unit": "Pieza",
+        "satUnitCode": "H87"
+      },
+      {
+        "sku": "EC-004",
+        "name": "Organizador compacto",
+        "qty": 2,
+        "unitPrice": 250,
+        "discountPercent": 0,
+        "unit": "Pieza",
+        "satUnitCode": "H87"
+      },
+            {
+        "sku": "EC-008",
+        "name": "Bolsa pastel",
+        "qty": 1,
+        "unitPrice": 499,
+        "discountPercent": 10,
+        "unit": "Pieza",
+        "satUnitCode": "H87"
+      },
+      {
+        "sku": "EC-007",
+        "name": "Organizador compacto",
+        "qty": 2,
+        "unitPrice": 250,
+        "discountPercent": 0,
+        "unit": "Pieza",
+        "satUnitCode": "H87"
+      }
+    ],
+    "shippingCost": 80,
+    "payment": {
+      "method": "card",
+      "paid": 1029.1
+    }
+  }
+]
