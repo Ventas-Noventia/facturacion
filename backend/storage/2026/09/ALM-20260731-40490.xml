@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante
+  xmlns:cfdi="http://www.sat.gob.mx/cfd/4"
+  xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital"
+  Version="4.0"
+  Serie="FN"
+  Folio="ALM-20260731-40490"
+  Fecha="2026-09-18T22:05:00.417529+00:00"
+  FormaPago="03"
+  SubTotal="176.73"
+  Moneda="MXN"
+  Total="205.00"
+  TipoDeComprobante="I"
+  Exportacion="01"
+  MetodoPago="PUE"
+  LugarExpedicion="53490">
+  <cfdi:Emisor Rfc="MALE950717M65" Nombre="NOVENTIA S.C. DE A.C." RegimenFiscal="601"/>
+  <cfdi:Receptor
+    Rfc="MALE950717M65"
+    Nombre="Chio"
+    DomicilioFiscalReceptor="53490"
+    RegimenFiscalReceptor="616"
+    UsoCFDI="S01"/>
+  <cfdi:Conceptos>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="31072026900" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Abanico blanco 🤍" ValorUnitario="17.24" Importe="17.24" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="17.24" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="2.76"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="31072026901" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Auriculares/airpods blancos" ValorUnitario="86.21" Importe="86.21" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="86.21" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="13.79"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="31072026902" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Funda para iPhone" ValorUnitario="73.28" Importe="73.28" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="73.28" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="11.72"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+  </cfdi:Conceptos>
+  <cfdi:Impuestos TotalImpuestosTrasladados="28.27">
+    <cfdi:Traslados>
+      <cfdi:Traslado Base="176.73" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="28.27"/>
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital
+      Version="1.1"
+      UUID="MOCK-1789769124912"
+      FechaTimbrado="2026-09-18T22:05:24.910Z"
+      RfcProvCertif="AAA010101AAA"
+      SelloCFD="SELLO_MOCK"
+      NoCertificadoSAT="00001000000000000000"
+      SelloSAT="SELLO_SAT_MOCK"/>
+  </cfdi:Complemento>
+</cfdi:Comprobante>

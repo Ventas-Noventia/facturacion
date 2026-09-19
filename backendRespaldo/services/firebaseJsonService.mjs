@@ -1,11 +1,8 @@
 import { applicationDefault, getApps, initializeApp } from "firebase-admin/app";
-import { FieldValue, getFirestore } from "firebase-admin/firestore";
+import { getFirestore } from "firebase-admin/firestore";
 
 const APP_NAME = "facturacion-noventia";
-const TASA_IVA = 0.16;
 const numero = valor => Number.isFinite(Number(valor)) ? Number(valor) : 0;
-const redondear = valor => Number(numero(valor).toFixed(2));
-const precioSinIva = precioConIva => redondear(numero(precioConIva) / (1 + TASA_IVA));
 
 function fechaIso(valor) {
   if (!valor) return "";
@@ -17,52 +14,33 @@ function fechaIso(valor) {
 function productoWhatsApp(item = {}) {
   const descuento = numero(item.descuentoPorcentaje);
   const precioOriginal = numero(item.precio);
-  const precioFinalConIva = precioOriginal * (1 - descuento / 100);
-  const precioFinalSinIva = precioSinIva(precioFinalConIva);
+  const precioFinal = precioOriginal * (1 - descuento / 100);
   return {
     clave: item.clave || item.idProducto || "",
     descripcion: item.nombre || "",
     cantidad: numero(item.cantidad),
     precioUnitarioOriginal: precioOriginal,
     descuentoPorcentaje: descuento,
-    precioUnitario: precioFinalSinIva,
-    precioVentaConIva: redondear(precioFinalConIva),
-    subtotal: redondear(precioFinalSinIva * numero(item.cantidad)),
+    precioUnitario: Number(precioFinal.toFixed(2)),
+    subtotal: Number((precioFinal * numero(item.cantidad)).toFixed(2)),
     unidad: "Pieza",
     claveUnidad: "H87",
-    tasaIva: TASA_IVA
+    tasaIva: 0.16
   };
 }
 
-function descuentoGeneralPedido(pedido = {}) {
-  const porcentaje = numero(pedido.descuentoGeneral);
-  if (porcentaje > 0) return porcentaje;
-  const original = numero(pedido.subtotalProductosOriginal);
-  const final = numero(pedido.subtotalProductos);
-  if (original > 0 && final >= 0 && final < original) return (1 - final / original) * 100;
-  return 0;
-}
-
-function productoSurtido(item = {}, pedido = {}) {
-  const tipoDescuento = String(pedido.tipoDescuento || "NINGUNO").toUpperCase();
-  const descuento = tipoDescuento === "GENERAL"
-    ? descuentoGeneralPedido(pedido)
-    : numero(item.descuentoPorcentaje);
-  const precioOriginal = numero(item.costo);
-  const precioFinalConIva = precioOriginal * (1 - descuento / 100);
-  const precioFinalSinIva = precioSinIva(precioFinalConIva);
+function productoSurtido(item = {}) {
   return {
     clave: item.clave || "",
     descripcion: item.nombre || "",
     cantidad: numero(item.cantidad),
-    precioUnitarioOriginal: precioOriginal,
-    descuentoPorcentaje: redondear(descuento),
-    precioUnitario: precioFinalSinIva,
-    precioVentaConIva: redondear(precioFinalConIva),
-    subtotal: redondear(precioFinalSinIva * numero(item.cantidad)),
+    precioUnitarioOriginal: numero(item.costo),
+    descuentoPorcentaje: 0,
+    precioUnitario: numero(item.costo),
+    subtotal: Number((numero(item.costo) * numero(item.cantidad)).toFixed(2)),
     unidad: "Pieza",
     claveUnidad: "H87",
-    tasaIva: TASA_IVA
+    tasaIva: 0.16
   };
 }
 
@@ -102,9 +80,6 @@ export class FirebaseJsonService {
       fuente: "FIRESTORE_SOLICITUDES_WHATSAPP",
       cliente: {nombre: pedido.cliente || "", email: "", telefono: pedido.telefono || ""},
       estado: pedido.estado || "",
-      cancelado: Boolean(pedido.cancelado),
-      facturado: Boolean(pedido.facturado),
-      facturaFolioInterno: pedido.facturaFolioInterno || "",
       estatusPago: pedido.estatusPago || "",
       metodoPagoTexto: pedido.metodoPago || "",
       costoEnvio: 0,
@@ -127,21 +102,13 @@ export class FirebaseJsonService {
       fuente: "FIRESTORE_SURTIDOS",
       cliente: {nombre: pedido.nombreCliente || "", email: ""},
       estado: pedido.estado || "",
-      cancelado: Boolean(pedido.cancelado),
-      facturado: Boolean(pedido.facturado),
-      facturaFolioInterno: pedido.facturaFolioInterno || "",
       estatusPago: pedido.estatusPago || "",
       metodoPagoTexto: pedido.metodoPago || "",
       costoEnvio: numero(pedido.costoEnvio),
       totalPedido: numero(pedido.total),
       totalPagado: numero(pedido.montoApartado),
       saldoPendiente: Math.max(0, numero(pedido.total) - numero(pedido.montoApartado)),
-      descuentoTipo: pedido.tipoDescuento || "NINGUNO",
-      descuentoGeneral: numero(pedido.descuentoGeneral),
-      descuentoTotal: numero(pedido.descuentoTotal),
-      subtotalProductosOriginal: numero(pedido.subtotalProductosOriginal),
-      subtotalProductos: numero(pedido.subtotalProductos),
-      productos: (pedido.productos || []).map(item => productoSurtido(item, pedido))
+      productos: (pedido.productos || []).map(productoSurtido)
     };
   }
 
@@ -151,38 +118,5 @@ export class FirebaseJsonService {
     if (key.startsWith("NV-")) return this.obtenerWhatsApp(key);
     if (key.startsWith("BAZ-") || key.startsWith("ALM-")) return this.obtenerSurtido(key);
     return (await this.obtenerWhatsApp(key)) || (await this.obtenerSurtido(key));
-  }
-
-  async marcarFacturado(pedido, factura) {
-    if (!pedido?.firebaseId) throw new Error("El pedido no incluye su identificador de Firebase");
-    const coleccion = pedido.fuente === "FIRESTORE_SOLICITUDES_WHATSAPP"
-      ? "solicitudes_whatsapp"
-      : pedido.fuente === "FIRESTORE_SURTIDOS" ? "surtidos" : null;
-    if (!coleccion) return null;
-
-    await this.firestore().collection(coleccion).doc(pedido.firebaseId).update({
-      facturado: true,
-      estadoFacturacion: "FACTURADO",
-      facturaId: factura.id,
-      facturaFolioInterno: factura.folioInterno,
-      facturadoEn: FieldValue.serverTimestamp()
-    });
-    return {coleccion, firebaseId:pedido.firebaseId};
-  }
-
-  async desmarcarFacturado(pedido) {
-    if (!pedido?.firebaseId) throw new Error("El pedido no incluye su identificador de Firebase");
-    const coleccion = pedido.fuente === "FIRESTORE_SOLICITUDES_WHATSAPP"
-      ? "solicitudes_whatsapp"
-      : pedido.fuente === "FIRESTORE_SURTIDOS" ? "surtidos" : null;
-    if (!coleccion) return null;
-    await this.firestore().collection(coleccion).doc(pedido.firebaseId).update({
-      facturado: false,
-      estadoFacturacion: FieldValue.delete(),
-      facturaId: FieldValue.delete(),
-      facturaFolioInterno: FieldValue.delete(),
-      facturadoEn: FieldValue.delete()
-    });
-    return {coleccion, firebaseId:pedido.firebaseId};
   }
 }

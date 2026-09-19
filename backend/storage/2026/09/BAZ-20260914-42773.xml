@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante
+  xmlns:cfdi="http://www.sat.gob.mx/cfd/4"
+  xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital"
+  Version="4.0"
+  Serie="FN"
+  Folio="BAZ-20260914-42773"
+  Fecha="2026-09-19T15:09:44.362089+00:00"
+  FormaPago="03"
+  SubTotal="4662.07"
+  Moneda="MXN"
+  Total="5407.99"
+  TipoDeComprobante="I"
+  Exportacion="01"
+  MetodoPago="PUE"
+  LugarExpedicion="53490">
+  <cfdi:Emisor Rfc="MALE950717M65" Nombre="NOVENTIA S.C. DE A.C." RegimenFiscal="601"/>
+  <cfdi:Receptor
+    Rfc="MALE950717M65"
+    Nombre="PERSONA MORAL"
+    DomicilioFiscalReceptor="53490"
+    RegimenFiscalReceptor="612"
+    UsoCFDI="G03"/>
+  <cfdi:Conceptos>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="pd14092026628" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Diadema" ValorUnitario="15.52" Importe="15.52" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="15.52" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="2.48"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="14092026629" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Cepillos para pestañas" ValorUnitario="10.34" Importe="10.34" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="10.34" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="1.65"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="14093026630" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Pestañas" ValorUnitario="36.21" Importe="36.21" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="36.21" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="5.79"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="14072026765" Cantidad="23" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Prueba" ValorUnitario="200.00" Importe="4600.00" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="4600.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="736.00"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+  </cfdi:Conceptos>
+  <cfdi:Impuestos TotalImpuestosTrasladados="745.92">
+    <cfdi:Traslados>
+      <cfdi:Traslado Base="4662.07" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="745.92"/>
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital
+      Version="1.1"
+      UUID="MOCK-1789831010432"
+      FechaTimbrado="2026-09-19T15:16:50.431Z"
+      RfcProvCertif="AAA010101AAA"
+      SelloCFD="SELLO_MOCK"
+      NoCertificadoSAT="00001000000000000000"
+      SelloSAT="SELLO_SAT_MOCK"/>
+  </cfdi:Complemento>
+</cfdi:Comprobante>

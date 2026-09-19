@@ -16,7 +16,7 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
 endobj
 6 0 obj
-<< /Length 1966 >>
+<< /Length 2700 >>
 stream
 0.12 g
 38 735 536 35 re f
@@ -39,28 +39,28 @@ ET
 BT
 /F1 8 Tf
 402 740 Td
-(Folio: TEST-XML-SIN-IVA) Tj
+(Folio: NOV-FAC-000014) Tj
 ET
 0 g
 0 g
 BT
 /F2 11 Tf
 42 716 Td
-(EMISOR DE PRUEBA) Tj
+(NOVENTIA S.C. DE A.C.) Tj
 ET
 0 g
 0 g
 BT
 /F1 8 Tf
 42 703 Td
-(RFC: -   Regimen: -) Tj
+(RFC: MALE950717M65   Regimen: 601) Tj
 ET
 0 g
 0 g
 BT
 /F1 8 Tf
 42 691 Td
-(Lugar de expedicion: -) Tj
+(Lugar de expedicion: 53490) Tj
 ET
 0 g
 0.94 g
@@ -77,28 +77,28 @@ ET
 BT
 /F2 9 Tf
 46 637 Td
-(PUBLICO EN GENERAL) Tj
+(PERSONA MORAL) Tj
 ET
 0 g
 0 g
 BT
 /F1 8 Tf
 330 649 Td
-(RFC: XAXX010101000   CP: 54700) Tj
+(RFC: MALE950717M65   CP: 53490) Tj
 ET
 0 g
 0 g
 BT
 /F1 8 Tf
 330 635 Td
-(Regimen: 616   Uso CFDI: G03) Tj
+(Regimen: 612   Uso CFDI: G03) Tj
 ET
 0 g
 0 g
 BT
 /F1 8 Tf
 42 606 Td
-(Fecha: 18/9/2026, 4:19:26 p.m.) Tj
+(Fecha: 19/9/2026, 9:16:50 a.m.) Tj
 ET
 0 g
 0 g
@@ -150,7 +150,7 @@ ET
 BT
 /F1 8 Tf
 45 564 Td
-(SKU1 - Producto) Tj
+(pd14092026628 - Diadema) Tj
 ET
 0 g
 0 g
@@ -164,79 +164,172 @@ ET
 BT
 /F1 8 Tf
 405 564 Td
-($100.00 MXN) Tj
+($15.52 MXN) Tj
 ET
 0 g
 0 g
 BT
 /F1 8 Tf
 505 564 Td
-($100.00 MXN) Tj
+($15.52 MXN) Tj
 ET
 0 g
 0.25 w
 42 557 m
 570 557 l S
-0.8 w
-365 513 m
+0 g
+BT
+/F1 8 Tf
+45 542 Td
+(14092026629 - Cepillos para pestanas) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+360 542 Td
+(1) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+405 542 Td
+($10.34 MXN) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+505 542 Td
+($10.34 MXN) Tj
+ET
+0 g
+0.25 w
+42 535 m
+570 535 l S
+0 g
+BT
+/F1 8 Tf
+45 520 Td
+(14093026630 - Pestanas) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+360 520 Td
+(1) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+405 520 Td
+($36.21 MXN) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+505 520 Td
+($36.21 MXN) Tj
+ET
+0 g
+0.25 w
+42 513 m
 570 513 l S
 0 g
 BT
+/F1 8 Tf
+45 498 Td
+(14072026765 - Prueba) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+360 498 Td
+(23) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+405 498 Td
+($200.00 MXN) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+505 498 Td
+($4600.00 MXN) Tj
+ET
+0 g
+0.25 w
+42 491 m
+570 491 l S
+0.8 w
+365 447 m
+570 447 l S
+0 g
+BT
 /F1 9 Tf
-405 497 Td
+405 431 Td
 (Subtotal) Tj
 ET
 0 g
 0 g
 BT
 /F1 9 Tf
-500 497 Td
-($100.00 MXN) Tj
+500 431 Td
+($4662.07 MXN) Tj
 ET
 0 g
 0 g
 BT
 /F1 9 Tf
-405 480 Td
+405 414 Td
 (IVA) Tj
 ET
 0 g
 0 g
 BT
 /F1 9 Tf
-500 480 Td
-($0.00 MXN) Tj
+500 414 Td
+($745.92 MXN) Tj
 ET
 0 g
 0.15 g
-395 451 175 21 re f
+395 385 175 21 re f
 0 g
 1 g
 BT
 /F2 10 Tf
-405 458 Td
+405 392 Td
 (TOTAL) Tj
 ET
 0 g
 1 g
 BT
 /F2 10 Tf
-488 458 Td
-($100.00 MXN) Tj
+488 392 Td
+($5407.99 MXN) Tj
 ET
 0 g
 0 g
 BT
 /F2 8 Tf
 42 92 Td
-(UUID de prueba: MOCK-1789769966562) Tj
+(UUID de prueba: MOCK-1789831010432) Tj
 ET
 0 g
 0 g
 BT
 /F1 8 Tf
 42 78 Td
-(Pedido de origen: TEST-XML-SIN-IVA   Moneda: MXN) Tj
+(Pedido de origen: BAZ-20260914-42773   Moneda: MXN) Tj
 ET
 0 g
 0.6 w
@@ -263,5 +356,5 @@ xref
 trailer
 << /Size 7 /Root 1 0 R >>
 startxref
-2420
+3154
 %%EOF

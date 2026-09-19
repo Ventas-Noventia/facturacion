@@ -16,4 +16,15 @@ export class PedidosService {
     return (await this.firebaseService.obtenerPedido(key))
       || (await this.ecommerceService.obtenerPedido(key));
   }
+
+  async marcarFacturado(pedido, factura) {
+    if (!String(pedido?.fuente || "").startsWith("FIRESTORE_")) return null;
+    return this.firebaseService.marcarFacturado(pedido, factura);
+  }
+
+
+  async desmarcarFacturado(pedido) {
+    if (!String(pedido?.fuente || "").startsWith("FIRESTORE_")) return null;
+    return this.firebaseService.desmarcarFacturado(pedido);
+  }
 }

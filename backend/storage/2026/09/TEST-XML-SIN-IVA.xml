@@ -5,7 +5,7 @@
   Version="4.0"
   Serie="F"
   Folio="TEST-XML-SIN-IVA"
-  Fecha="2026-09-10T15:53:53.624Z"
+  Fecha="2026-09-18T22:19:26.468Z"
   FormaPago="03"
   SubTotal="100.00"
   Moneda="MXN"
@@ -29,8 +29,8 @@
   <cfdi:Complemento>
     <tfd:TimbreFiscalDigital
       Version="1.1"
-      UUID="MOCK-1789055633640"
-      FechaTimbrado="2026-09-10T15:53:53.639Z"
+      UUID="MOCK-1789769966562"
+      FechaTimbrado="2026-09-18T22:19:26.560Z"
       RfcProvCertif="AAA010101AAA"
       SelloCFD="SELLO_MOCK"
       NoCertificadoSAT="00001000000000000000"

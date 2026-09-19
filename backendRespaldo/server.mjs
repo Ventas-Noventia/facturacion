@@ -10,10 +10,7 @@ import { LocalClienteFiscalRepository } from "./repositories/localClienteFiscalR
 import { SupabaseClienteFiscalRepository } from "./repositories/supabaseClienteFiscalRepository.mjs";
 import { SupabaseProfileRepository } from "./repositories/supabaseProfileRepository.mjs";
 import { SupabaseConfiguracionFiscalRepository } from "./repositories/supabaseConfiguracionFiscalRepository.mjs";
-import { SupabaseAuditoriaRepository } from "./repositories/supabaseAuditoriaRepository.mjs";
-import { LocalAuditoriaRepository } from "./repositories/localAuditoriaRepository.mjs";
 import { MockTimbradoService } from "./services/mockTimbradoService.mjs";
-import { MockCancelacionService } from "./services/mockCancelacionService.mjs";
 import { EcommerceJsonService } from "./services/ecommerceJsonService.mjs";
 import { FirebaseJsonService } from "./services/firebaseJsonService.mjs";
 import { PedidosService } from "./services/pedidosService.mjs";
@@ -23,10 +20,8 @@ import { SupabaseAuthService } from "./services/supabaseAuthService.mjs";
 import { SupabaseDocumentStorageService } from "./services/supabaseDocumentStorageService.mjs";
 import { crearFactura } from "../shared/domain/factura.mjs";
 import { loadEnv } from "./config/loadEnv.mjs";
-import {applySecurityHeaders,readJsonBody,loginRateStatus,recordLoginFailure,clearLoginFailures,trustedMutationOrigin,validateProductionEnvironment} from "./security/httpSecurity.mjs";
 
 loadEnv();
-validateProductionEnvironment();
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.join(dir, "..", "public");
@@ -51,7 +46,6 @@ const clientes = supabaseConfigured
     })
   : new LocalClienteFiscalRepository();
 const pac = new MockTimbradoService();
-const cancelador = new MockCancelacionService();
 const reportes = new ReportesService();
 const auth = new LocalAuthService();
 const supabaseAuth = authConfigured
@@ -65,7 +59,6 @@ const documentStorage = supabaseConfigured
     })
   : null;
 const configuracionFiscal=supabaseConfigured?new SupabaseConfiguracionFiscalRepository({url:process.env.SUPABASE_URL,serviceRoleKey:process.env.SUPABASE_SERVICE_ROLE_KEY}):null;
-const auditoria=supabaseConfigured?new SupabaseAuditoriaRepository({url:process.env.SUPABASE_URL,serviceRoleKey:process.env.SUPABASE_SERVICE_ROLE_KEY}):new LocalAuditoriaRepository();
 const pedidos = new PedidosService({
   ecommerceService: new EcommerceJsonService(),
   firebaseService: new FirebaseJsonService({projectId:process.env.FIREBASE_PROJECT_ID})
@@ -85,7 +78,9 @@ function send(res, status, body) {
 }
 
 async function body(req) {
-  return readJsonBody(req);
+  const chunks = [];
+  for await (const chunk of req) chunks.push(chunk);
+  return JSON.parse(Buffer.concat(chunks).toString("utf8") || "{}");
 }
 
 function cookies(req){
@@ -138,12 +133,6 @@ async function allow(req, res, permission) {
   return true;
 }
 
-async function registrarAuditoria(req,factura,accion,detalle={}){
-  try{
-    await auditoria.save({facturaId:factura?.id,folioInterno:factura?.folioInterno,folioOrigen:factura?.folioOrigen,accion,usuarioId:req.session?.user?.id,usuarioNombre:req.session?.profile?.nombre,usuarioEmail:req.session?.user?.email,detalle});
-  }catch(error){console.error("Bitácora:",error.message)}
-}
-
 async function serveFile(res, filePath, downloadName) {
   try {
     const data = await fs.readFile(filePath);
@@ -173,11 +162,7 @@ function serveBytes(res,bytes,contentType,downloadName){
 
 http.createServer(async (req, res) => {
   try {
-    applySecurityHeaders(res,{production:process.env.APP_ENV==="production"});
     const u = new URL(req.url, `http://${req.headers.host}`);
-
-    if(["POST","PUT","PATCH","DELETE"].includes(req.method)&&!trustedMutationOrigin(req))
-      return send(res,403,{error:"Origen de solicitud no autorizado"});
 
     if (req.method === "GET" && u.pathname === "/favicon.ico") {
       res.writeHead(204);
@@ -192,14 +177,11 @@ http.createServer(async (req, res) => {
       if(!supabaseAuth)return send(res,503,{error:"Falta configurar SUPABASE_PUBLISHABLE_KEY"});
       const input=await body(req);
       if(!input.email||!input.password)return send(res,400,{error:"Correo y contraseña son obligatorios"});
-      const rate=loginRateStatus(req,input.email);
-      if(!rate.allowed){res.setHeader("Retry-After",String(rate.retryAfter));return send(res,429,{error:"Demasiados intentos. Espera unos minutos antes de volver a intentarlo"})}
       let session;
       try{session=await supabaseAuth.login(String(input.email).trim().toLowerCase(),String(input.password))}
-      catch{recordLoginFailure(rate.key);return send(res,401,{error:"Correo o contraseña incorrectos"})}
+      catch{return send(res,401,{error:"Correo o contraseña incorrectos"})}
       const profile=await usuarios.findById(session.user.id);
       if(!profile||!profile.activo)return send(res,403,{error:"Tu usuario no tiene un perfil activo"});
-      clearLoginFailures(rate.key);
       authCookies(res,session);
       return send(res,200,{user:{id:session.user.id,email:session.user.email},profile,permissions:auth.permissionsFor(profile.rol)});
     }
@@ -233,7 +215,6 @@ http.createServer(async (req, res) => {
       if(missing)return send(res,400,{error:`Falta ${missing}`});
       if(!/^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/.test(String(input.rfc).trim().toUpperCase()))return send(res,400,{error:"El RFC del emisor no tiene un formato válido"});
       if(!/^\d{5}$/.test(String(input.codigoPostal)))return send(res,400,{error:"El código postal debe contener 5 números"});
-      if(input.correo&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(input.correo).trim()))return send(res,400,{error:"El correo del emisor no tiene un formato válido"});
       return send(res,200,await configuracionFiscal.save(input));
     }
 
@@ -248,27 +229,12 @@ http.createServer(async (req, res) => {
 
     if (req.method === "GET" && u.pathname === "/api/facturas") {
       if (!(await allow(req,res,"facturas:ver"))) return;
-      if(u.searchParams.has("page")||u.searchParams.get("exportar")==="1"){
-        const exportar=u.searchParams.get("exportar")==="1";
-        return send(res,200,await facturas.page({q:u.searchParams.get("q")||"",desde:u.searchParams.get("desde")||"",hasta:u.searchParams.get("hasta")||"",origen:u.searchParams.get("origen")||"",estatus:u.searchParams.get("estatus")||"",sync:u.searchParams.get("sync")||"",page:exportar?1:u.searchParams.get("page")||1,pageSize:exportar?5000:u.searchParams.get("pageSize")||25}));
-      }
       return send(res, 200, await facturas.list());
     }
 
     if (req.method === "GET" && u.pathname === "/api/reportes") {
       if (!(await allow(req,res,"reportes:ver"))) return;
-      const filtros={desde:u.searchParams.get("desde")||"",hasta:u.searchParams.get("hasta")||"",origen:u.searchParams.get("origen")||"",estatus:u.searchParams.get("estatus")||""};
-      return send(res, 200, reportes.construir(await facturas.list(),filtros));
-    }
-
-    if (req.method === "GET" && u.pathname === "/api/auditoria/resumen") {
-      if (!(await allow(req,res,"auditoria:ver"))) return;
-      return send(res,200,await auditoria.resumen({q:u.searchParams.get("q")||"",accion:u.searchParams.get("accion")||"",desde:u.searchParams.get("desde")||"",hasta:u.searchParams.get("hasta")||"",page:u.searchParams.get("page")||1,pageSize:u.searchParams.get("pageSize")||25}));
-    }
-
-    if (req.method === "GET" && /^\/api\/auditoria\/factura\/[^/]+$/.test(u.pathname)) {
-      if (!(await allow(req,res,"auditoria:ver"))) return;
-      return send(res,200,await auditoria.timeline(decodeURIComponent(u.pathname.split("/")[4])));
+      return send(res, 200, reportes.construir(await facturas.list()));
     }
 
     if (req.method === "GET" && u.pathname === "/api/usuarios") {
@@ -305,105 +271,13 @@ http.createServer(async (req, res) => {
       if (!folio) return send(res,400,{error:"Falta folio"});
       const pedido = await pedidos.obtenerPedido(folio);
       if (!pedido) return send(res,404,{error:"Pedido no encontrado"});
-      const existente=await facturas.findByFolioOrigen(pedido.folio);
-      if(existente)return send(res,409,{error:`El pedido ya fue facturado con el folio ${existente.folioInterno||existente.id}`,pedidoFolio:pedido.folio,facturaId:existente.id,folioInterno:existente.folioInterno});
-      if(pedido.facturado)return send(res,409,{error:`El pedido ya está marcado como facturado${pedido.facturaFolioInterno?` con el folio ${pedido.facturaFolioInterno}`:""}`,pedidoFolio:pedido.folio,folioInterno:pedido.facturaFolioInterno||null});
       return send(res,200,pedido);
     }
 
     if (req.method === "POST" && u.pathname === "/api/facturas") {
       if (!(await allow(req,res,"facturas:crear"))) return;
-      const input=await body(req);
-      const folio=String(input.folioOrigen||"").trim();
-      const existente=folio?await facturas.findByFolioOrigen(folio):null;
-      if(existente)return send(res,409,{error:`El pedido ya fue facturado con el folio ${existente.folioInterno||existente.id}`,facturaId:existente.id,folioInterno:existente.folioInterno});
-
-      const pedidoFirebase=/^(NV|BAZ|ALM)-/i.test(folio)?await pedidos.obtenerPedido(folio):null;
-      if(/^(NV|BAZ|ALM)-/i.test(folio)&&!pedidoFirebase)return send(res,404,{error:"El pedido de Firebase ya no existe"});
-      if(pedidoFirebase?.cancelado)return send(res,409,{error:"No se puede facturar un pedido cancelado"});
-      if(pedidoFirebase?.facturado)return send(res,409,{error:`El pedido ya está marcado como facturado${pedidoFirebase.facturaFolioInterno?` con el folio ${pedidoFirebase.facturaFolioInterno}`:""}`});
-
-      const factura = {
-        ...crearFactura(input),
-        pedido:pedidoFirebase?{
-          firebaseId:pedidoFirebase.firebaseId,
-          fuente:pedidoFirebase.fuente,
-          estadoOriginal:pedidoFirebase.estado
-        }:undefined
-      };
-      let guardada;
-      try{
-        guardada=await facturas.save(factura);
-      }catch(error){
-        if(/duplicate|unique|ya fue facturado/i.test(error.message))return send(res,409,{error:"Este pedido ya fue facturado"});
-        throw error;
-      }
-
-      if(pedidoFirebase){
-        try{
-          const sincronizacion=await pedidos.marcarFacturado(pedidoFirebase,guardada);
-          guardada=await facturas.update(guardada.id,{pedidoMarcadoFacturado:true,sincronizacionPedido:sincronizacion});
-        }catch(error){
-          guardada=await facturas.update(guardada.id,{pedidoMarcadoFacturado:false,errorSincronizacionPedido:error.message});
-          guardada.advertencia="La factura se guardó, pero no fue posible marcar el pedido en Firebase.";
-        }
-      }
-      await registrarAuditoria(req,guardada,"CREACION",{estatus:guardada.estatus,origen:guardada.origen,total:guardada.total,sincronizadoFirebase:guardada.pedidoMarcadoFacturado??null});
-      return send(res,201,guardada);
-    }
-
-    if (req.method === "PUT" && /^\/api\/facturas\/[^/]+$/.test(u.pathname)) {
-      if (!(await allow(req,res,"facturas:crear"))) return;
-      const id=u.pathname.split("/")[3];
-      const existente=await facturas.findById(id);
-      if(!existente)return send(res,404,{error:"Factura no encontrada"});
-      if(existente.estatus!=="BORRADOR")return send(res,409,{error:"Solo se pueden modificar facturas en estado BORRADOR"});
-      const input=await body(req);
-      if(String(input.folioOrigen||"").trim()!==String(existente.folioOrigen||"").trim()||String(input.origen||"")!==String(existente.origen||""))
-        return send(res,400,{error:"El pedido y el origen no pueden modificarse durante la edición"});
-      const validada=crearFactura(input);
-      const actualizada=await facturas.update(id,{
-        origen:existente.origen,folioOrigen:existente.folioOrigen,cliente:validada.cliente,usoCfdi:validada.usoCfdi,
-        formaPago:validada.formaPago,metodoPago:validada.metodoPago,aplicarIva:validada.aplicarIva,tasaIva:validada.tasaIva,
-        moneda:validada.moneda,conceptos:validada.conceptos,subtotal:validada.subtotal,impuestos:validada.impuestos,total:validada.total,
-        editadaEn:new Date().toISOString(),editadaPor:{id:req.session.user.id,nombre:req.session.profile.nombre,email:req.session.user.email}
-      });
-      await registrarAuditoria(req,actualizada,"EDICION",{totalAnterior:existente.total,totalNuevo:actualizada.total,clienteAnterior:existente.cliente?.razonSocial,clienteNuevo:actualizada.cliente?.razonSocial});
-      return send(res,200,actualizada);
-    }
-
-    if (req.method === "DELETE" && /^\/api\/facturas\/[^/]+$/.test(u.pathname)) {
-      if (!(await allow(req,res,"facturas:crear"))) return;
-      const id=u.pathname.split("/")[3];
-      const existente=await facturas.findById(id);
-      if(!existente)return send(res,404,{error:"Factura no encontrada"});
-      if(existente.estatus!=="BORRADOR")return send(res,409,{error:"Solo se pueden eliminar facturas en estado BORRADOR"});
-      if(existente.pedidoMarcadoFacturado===true&&existente.pedido?.firebaseId){
-        try{await pedidos.desmarcarFacturado(existente.pedido)}
-        catch(error){return send(res,502,{error:`No se eliminó la factura porque no fue posible liberar el pedido en Firebase: ${error.message}`})}
-      }
-      await facturas.delete(id);
-      await registrarAuditoria(req,existente,"ELIMINACION",{estatus:existente.estatus,total:existente.total,pedidoLiberadoFirebase:existente.pedidoMarcadoFacturado===true});
-      return send(res,200,{ok:true,id});
-    }
-
-    if (req.method === "POST" && /^\/api\/facturas\/[^/]+\/reintentar-sincronizacion$/.test(u.pathname)) {
-      if (!(await allow(req,res,"facturas:crear"))) return;
-      const id=u.pathname.split("/")[3];
-      const factura=await facturas.findById(id);
-      if(!factura)return send(res,404,{error:"Factura no encontrada"});
-      if(!factura.pedido?.firebaseId||!factura.pedido?.fuente)
-        return send(res,400,{error:"Esta factura no está vinculada con un pedido de Firebase"});
-      try{
-        const sincronizacion=await pedidos.marcarFacturado(factura.pedido,factura);
-        const actualizada=await facturas.update(id,{pedidoMarcadoFacturado:true,sincronizacionPedido:sincronizacion,errorSincronizacionPedido:null});
-        await registrarAuditoria(req,actualizada,"SINCRONIZACION_FIREBASE",{resultado:"EXITOSA",...sincronizacion});
-        return send(res,200,actualizada);
-      }catch(error){
-        await facturas.update(id,{pedidoMarcadoFacturado:false,errorSincronizacionPedido:error.message});
-        await registrarAuditoria(req,factura,"SINCRONIZACION_FIREBASE",{resultado:"ERROR",error:error.message});
-        return send(res,502,{error:`No fue posible sincronizar el pedido con Firebase: ${error.message}`});
-      }
+      const factura = crearFactura(await body(req));
+      return send(res,201,await facturas.save(factura));
     }
 
     if (req.method === "POST" && /^\/api\/facturas\/[^/]+\/timbrar$/.test(u.pathname)) {
@@ -411,7 +285,6 @@ http.createServer(async (req, res) => {
       const id = u.pathname.split("/")[3];
       const factura = await facturas.findById(id);
       if (!factura) return send(res,404,{error:"Factura no encontrada"});
-      if(factura.estatus!=="BORRADOR")return send(res,409,{error:"Solo se pueden timbrar facturas en estado BORRADOR"});
       const emisor=await configuracionFiscal?.get();
       const result = await pac.timbrar({...factura,emisor:emisor||undefined});
       let storagePaths={};
@@ -432,29 +305,7 @@ http.createServer(async (req, res) => {
         ...storagePaths,
         documentStorage:documentStorage?"supabase":"local"
       });
-      await registrarAuditoria(req,updated,"TIMBRADO",{estatus:updated.estatus,uuid:updated.uuid,pac:"mock"});
       return send(res,200,updated);
-    }
-
-    if (req.method === "POST" && /^\/api\/facturas\/[^/]+\/cancelar$/.test(u.pathname)) {
-      if (!(await allow(req,res,"facturas:cancelar"))) return;
-      const id=u.pathname.split("/")[3];
-      const factura=await facturas.findById(id);
-      if(!factura)return send(res,404,{error:"Factura no encontrada"});
-      if(!String(factura.estatus||"").startsWith("TIMBRADA"))return send(res,409,{error:"Solo se pueden cancelar facturas timbradas"});
-      const input=await body(req);
-      const resultado=cancelador.cancelar(factura,input);
-      let cancelada=await facturas.update(id,{...resultado,comentarioCancelacion:String(input.comentario||"").trim(),canceladaPor:{id:req.session.user.id,nombre:req.session.profile.nombre,email:req.session.user.email},pedidoMarcadoFacturado:factura.pedido?.firebaseId?false:factura.pedidoMarcadoFacturado,pedidoLiberadoPorCancelacion:Boolean(factura.pedido?.firebaseId)});
-      if(factura.pedidoMarcadoFacturado===true&&factura.pedido?.firebaseId){
-        try{await pedidos.desmarcarFacturado(factura.pedido)}
-        catch(error){
-          await facturas.update(id,{estatus:factura.estatus,motivoCancelacion:null,uuidSustitucion:null,fechaCancelacion:null,acuseCancelacion:null,comentarioCancelacion:null,canceladaPor:null,pedidoMarcadoFacturado:factura.pedidoMarcadoFacturado,pedidoLiberadoPorCancelacion:null});
-          return send(res,502,{error:`La cancelación se revirtió porque no fue posible liberar el pedido en Firebase: ${error.message}`});
-        }
-      }
-      cancelada=await facturas.findById(id);
-      await registrarAuditoria(req,cancelada,"CANCELACION",{motivo:resultado.motivoCancelacion,uuidSustitucion:resultado.uuidSustitucion,acuse:resultado.acuseCancelacion,pedidoLiberadoFirebase:Boolean(factura.pedidoMarcadoFacturado)});
-      return send(res,200,cancelada);
     }
 
     if (req.method === "GET" && /^\/api\/facturas\/[^/]+\/documento\/(xml|pdf)$/.test(u.pathname)) {
@@ -467,11 +318,9 @@ http.createServer(async (req, res) => {
       const storagePath=tipo==="xml"?factura.xmlStoragePath:factura.pdfStoragePath;
       if(storagePath&&documentStorage){
         const bytes=await documentStorage.download(storagePath);
-        await registrarAuditoria(req,factura,"DESCARGA_DOCUMENTO",{tipo,almacenamiento:"supabase"});
         return serveBytes(res,bytes,mime[`.${tipo}`],`${factura.folioInterno||factura.folioOrigen||factura.id}.${tipo}`);
       }
       if (!rel) return send(res,404,{error:"Documento no disponible"});
-      await registrarAuditoria(req,factura,"DESCARGA_DOCUMENTO",{tipo,almacenamiento:"local"});
       return serveFile(res, path.join(storageRoot,rel), `${factura.folioOrigen || factura.id}.${tipo}`);
     }
 
@@ -480,6 +329,6 @@ http.createServer(async (req, res) => {
     return serveFile(res, path.join(publicDir,safe));
   } catch (e) {
     if (e.code === "ENOENT") { res.writeHead(404); res.end("Not found"); }
-    else send(res,e.statusCode||500,{error:e.statusCode?e.message:"Ocurrió un error interno"});
+    else send(res,400,{error:e.message});
   }
 }).listen(port,()=>console.log(`Facturación: http://localhost:${port}`));

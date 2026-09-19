@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante
+  xmlns:cfdi="http://www.sat.gob.mx/cfd/4"
+  xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital"
+  Version="4.0"
+  Serie="FN"
+  Folio="BAZ-20260807-24255"
+  Fecha="2026-09-18T18:01:01.13943+00:00"
+  FormaPago="03"
+  SubTotal="389.66"
+  Moneda="MXN"
+  Total="452.00"
+  TipoDeComprobante="I"
+  Exportacion="01"
+  MetodoPago="PUE"
+  LugarExpedicion="53490">
+  <cfdi:Emisor Rfc="MALE950717M65" Nombre="NOVENTIA S.C. DE A.C." RegimenFiscal="601"/>
+  <cfdi:Receptor
+    Rfc="ANAL980620MD1"
+    Nombre="Angelica Alvarez"
+    DomicilioFiscalReceptor="43123"
+    RegimenFiscalReceptor="616"
+    UsoCFDI="S01"/>
+  <cfdi:Conceptos>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="07082026902" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Pestañas postizas" ValorUnitario="86.21" Importe="86.21" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="86.21" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="13.79"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="07082026903" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Extensiones de pestañas" ValorUnitario="103.45" Importe="103.45" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="103.45" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="16.55"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="07082026905" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Pestañas" ValorUnitario="200.00" Importe="200.00" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="200.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="32.00"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+  </cfdi:Conceptos>
+  <cfdi:Impuestos TotalImpuestosTrasladados="62.34">
+    <cfdi:Traslados>
+      <cfdi:Traslado Base="389.66" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="62.34"/>
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital
+      Version="1.1"
+      UUID="MOCK-1789754503350"
+      FechaTimbrado="2026-09-18T18:01:43.349Z"
+      RfcProvCertif="AAA010101AAA"
+      SelloCFD="SELLO_MOCK"
+      NoCertificadoSAT="00001000000000000000"
+      SelloSAT="SELLO_SAT_MOCK"/>
+  </cfdi:Complemento>
+</cfdi:Comprobante>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante
+  xmlns:cfdi="http://www.sat.gob.mx/cfd/4"
+  xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital"
+  Version="4.0"
+  Serie="FN"
+  Folio="ALM-20260829-54402"
+  Fecha="2026-09-17T22:20:46.849992+00:00"
+  FormaPago="03"
+  SubTotal="336.21"
+  Moneda="MXN"
+  Total="390.00"
+  TipoDeComprobante="I"
+  Exportacion="01"
+  MetodoPago="PUE"
+  LugarExpedicion="53490">
+  <cfdi:Emisor Rfc="MALE950717M65" Nombre="NOVENTIA S.C. DE A.C." RegimenFiscal="601"/>
+  <cfdi:Receptor
+    Rfc="MALE950717M65"
+    Nombre="PERSONA MORAL"
+    DomicilioFiscalReceptor="53490"
+    RegimenFiscalReceptor="612"
+    UsoCFDI="G03"/>
+  <cfdi:Conceptos>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="0707202669" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Pelota para perro" ValorUnitario="21.55" Importe="21.55" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="21.55" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="3.45"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="21072026250" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Organizador de ropa interior" ValorUnitario="28.02" Importe="28.02" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="28.02" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="4.48"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="0408202671" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Juguete molar para perro" ValorUnitario="30.17" Importe="30.17" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="30.17" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="4.83"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="25062026224" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Dispensador de agua" ValorUnitario="107.76" Importe="107.76" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="107.76" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="17.24"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="17082026148AN" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Set de muñecos de la serie de Sprunki" ValorUnitario="81.90" Importe="81.90" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="81.90" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="13.10"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="04072026258" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Lámpara de escritorio" ValorUnitario="66.81" Importe="66.81" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="66.81" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="10.69"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+  </cfdi:Conceptos>
+  <cfdi:Impuestos TotalImpuestosTrasladados="53.79">
+    <cfdi:Traslados>
+      <cfdi:Traslado Base="336.21" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="53.79"/>
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital
+      Version="1.1"
+      UUID="MOCK-1789683691710"
+      FechaTimbrado="2026-09-17T22:21:31.708Z"
+      RfcProvCertif="AAA010101AAA"
+      SelloCFD="SELLO_MOCK"
+      NoCertificadoSAT="00001000000000000000"
+      SelloSAT="SELLO_SAT_MOCK"/>
+  </cfdi:Complemento>
+</cfdi:Comprobante>

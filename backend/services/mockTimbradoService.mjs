@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { crearPdfSimulado } from "./simplePdfService.mjs";
+import { crearPdfFactura } from "./simplePdfService.mjs";
 
 const dir=path.dirname(fileURLToPath(import.meta.url));
 const root=path.join(dir,"..","storage");
@@ -99,18 +99,7 @@ export class MockTimbradoService{
     const pdf=path.join(folder,`${folio}.pdf`);
 
     await fs.writeFile(xml,construirXml(f,uuid,n.toISOString()),"utf8");
-    await fs.writeFile(pdf,crearPdfSimulado([
-      "NOVENTIA - FACTURA DE PRUEBA",
-      "Documento no fiscal",
-      `Emisor: ${f.emisor?.razonSocial||"EMPRESA DE PRUEBA SA DE CV"}`,
-      `Folio: ${f.folioInterno||folio}`,
-      `UUID: ${uuid}`,
-      `Cliente: ${f.cliente?.razonSocial||"-"}`,
-      `RFC: ${f.cliente?.rfc||"-"}`,
-      `Subtotal: $${money(f.subtotal)} MXN`,
-      `IVA: $${money(f.impuestos)} MXN`,
-      `Total: $${money(f.total)} MXN`
-    ]));
+    await fs.writeFile(pdf,crearPdfFactura({factura:f,emisor:f.emisor||{},uuid,fechaTimbrado:n.toISOString()}));
 
     return{
       facturaId:f.id,

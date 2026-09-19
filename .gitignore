@@ -1,3 +1,15 @@
 .env
 .DS_Store
 backend/data/facturas.json
+
+.env
+.env.*
+!.env.example
+node_modules/
+backups/
+*firebase*service*account*.json
+*firebase-adminsdk*.json
+*.cer
+*.key
+*.pem
+*.pfx

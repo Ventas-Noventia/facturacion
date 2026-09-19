@@ -7,51 +7,261 @@ endobj
 << /Type /Pages /Kids [3 0 R] /Count 1 >>
 endobj
 3 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>
 endobj
 4 0 obj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
 endobj
 5 0 obj
-<< /Length 340 >>
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+6 0 obj
+<< /Length 1951 >>
 stream
+0.12 g
+38 735 536 35 re f
+0 g
+1 g
 BT
-/F1 12 Tf
-60 760 Td
-18 TL
-(NOVENTIA - FACTURA DE PRUEBA) Tj
-T*
-(Documento no fiscal) Tj
-T*
-(Emisor: EMPRESA DE PRUEBA SA DE CV) Tj
-T*
-(Folio: TEST-XML) Tj
-T*
-(UUID: MOCK-1789055633634) Tj
-T*
-(Cliente: PUBLICO EN GENERAL) Tj
-T*
-(RFC: XAXX010101000) Tj
-T*
-(Subtotal: $100.00 MXN) Tj
-T*
-(IVA: $16.00 MXN) Tj
-T*
-(Total: $116.00 MXN) Tj
-T*
+/F2 17 Tf
+52 751 Td
+(NOVENTIA) Tj
 ET
+0 g
+1 g
+BT
+/F2 8 Tf
+303 752 Td
+(COMPROBANTE DE PRUEBA - SIN VALOR FISCAL) Tj
+ET
+0 g
+1 g
+BT
+/F1 8 Tf
+402 740 Td
+(Folio: TEST-XML) Tj
+ET
+0 g
+0 g
+BT
+/F2 11 Tf
+42 716 Td
+(EMISOR DE PRUEBA) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+42 703 Td
+(RFC: -   Regimen: -) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+42 691 Td
+(Lugar de expedicion: -) Tj
+ET
+0 g
+0.94 g
+38 622 536 42 re f
+0 g
+0 g
+BT
+/F2 9 Tf
+46 650 Td
+(RECEPTOR) Tj
+ET
+0 g
+0 g
+BT
+/F2 9 Tf
+46 637 Td
+(PUBLICO EN GENERAL) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+330 649 Td
+(RFC: XAXX010101000   CP: 54700) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+330 635 Td
+(Regimen: 616   Uso CFDI: G03) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+42 606 Td
+(Fecha: 18/9/2026, 4:19:26 p.m.) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+260 606 Td
+(Forma de pago: 03) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+442 606 Td
+(Metodo: PUE) Tj
+ET
+0 g
+0.18 g
+38 579 536 20 re f
+0 g
+1 g
+BT
+/F2 8 Tf
+45 586 Td
+(Clave / Descripcion) Tj
+ET
+0 g
+1 g
+BT
+/F2 8 Tf
+355 586 Td
+(Cant.) Tj
+ET
+0 g
+1 g
+BT
+/F2 8 Tf
+405 586 Td
+(P. unitario) Tj
+ET
+0 g
+1 g
+BT
+/F2 8 Tf
+512 586 Td
+(Importe) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+45 564 Td
+(SKU1 - Producto) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+360 564 Td
+(1) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+405 564 Td
+($100.00 MXN) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+505 564 Td
+($100.00 MXN) Tj
+ET
+0 g
+0.25 w
+42 557 m
+570 557 l S
+0.8 w
+365 513 m
+570 513 l S
+0 g
+BT
+/F1 9 Tf
+405 497 Td
+(Subtotal) Tj
+ET
+0 g
+0 g
+BT
+/F1 9 Tf
+500 497 Td
+($100.00 MXN) Tj
+ET
+0 g
+0 g
+BT
+/F1 9 Tf
+405 480 Td
+(IVA) Tj
+ET
+0 g
+0 g
+BT
+/F1 9 Tf
+500 480 Td
+($16.00 MXN) Tj
+ET
+0 g
+0.15 g
+395 451 175 21 re f
+0 g
+1 g
+BT
+/F2 10 Tf
+405 458 Td
+(TOTAL) Tj
+ET
+0 g
+1 g
+BT
+/F2 10 Tf
+488 458 Td
+($116.00 MXN) Tj
+ET
+0 g
+0 g
+BT
+/F2 8 Tf
+42 92 Td
+(UUID de prueba: MOCK-1789769966484) Tj
+ET
+0 g
+0 g
+BT
+/F1 8 Tf
+42 78 Td
+(Pedido de origen: TEST-XML   Moneda: MXN) Tj
+ET
+0 g
+0.6 w
+38 65 m
+574 65 l S
+0 g
+BT
+/F2 8 Tf
+68 47 Td
+(Este documento fue generado en ambiente de pruebas. No es un CFDI y no tiene validez ante el SAT.) Tj
+ET
+0 g
 endstream
 endobj
 xref
-0 6
+0 7
 0000000000 65535 f 
 0000000015 00000 n 
 0000000064 00000 n 
 0000000121 00000 n 
-0000000247 00000 n 
-0000000317 00000 n 
+0000000257 00000 n 
+0000000327 00000 n 
+0000000402 00000 n 
 trailer
-<< /Size 6 /Root 1 0 R >>
+<< /Size 7 /Root 1 0 R >>
 startxref
-708
+2405
 %%EOF
