@@ -1,0 +1,1 @@
+[{"orderId":"WEB-000101","createdAt":"2026-01-01","customer":{"name":"Cliente ficticio","email":"prueba@example.invalid"},"shippingCost":0,"status":"paid","payment":{"method":"transferencia","paid":116},"items":[{"sku":"DEMO-1","name":"Producto de prueba","qty":1,"unitPrice":116}]}]

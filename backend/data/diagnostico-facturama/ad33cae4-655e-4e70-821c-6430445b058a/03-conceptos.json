@@ -1,0 +1,76 @@
+{
+  "caso": "03-conceptos",
+  "prueba": "Conceptos del pedido y datos generales mínimos",
+  "estado": "CONFIRMADO",
+  "solicitud": {
+    "NameId": 1,
+    "Currency": "MXN",
+    "CfdiType": "I",
+    "Folio": "23756244",
+    "Date": "2026-10-29T16:03:17",
+    "PaymentForm": "03",
+    "PaymentMethod": "PUE",
+    "ExpeditionPlace": "42501",
+    "Exportation": "01",
+    "Issuer": {
+      "Rfc": "EKU9003173C9",
+      "Name": "ESCUELA KEMPER URGATE",
+      "FiscalRegime": "601"
+    },
+    "Receiver": {
+      "Rfc": "URE180429TM6",
+      "Name": "UNIVERSIDAD ROBOTICA ESPAÑOLA",
+      "FiscalRegime": "601",
+      "TaxZipCode": "86991",
+      "CfdiUse": "G01"
+    },
+    "Items": [
+      {
+        "Unit": "Pieza",
+        "Taxes": [
+          {
+            "Base": 130,
+            "Name": "IVA",
+            "Rate": 0.16,
+            "Total": 20.8,
+            "IsRetention": false
+          }
+        ],
+        "Total": 150.8,
+        "Quantity": 1,
+        "Subtotal": 130,
+        "UnitCode": "H87",
+        "TaxObject": "02",
+        "UnitPrice": 130,
+        "Description": "Este producto es el juego de mesa Dobble Pokémon (también conocido como Spot It! en algunas regiones)_x000D_\nEl juego consiste en un mazo de 55 cartas, cada una con ocho símbolos de Pokémon, donde siempre hay un símbolo coincidente entre cualquier par de cartas_x000D_\nViene en una caja de hojalata temática y está diseñado para mejorar la agilidad visual y la rapidez mental.",
+        "ProductCode": "01010101",
+        "IdentificationNumber": "0508202640"
+      },
+      {
+        "Unit": "Unidad de servicio",
+        "Taxes": [
+          {
+            "Base": 74.137931,
+            "Name": "IVA",
+            "Rate": 0.16,
+            "Total": 11.862069,
+            "IsRetention": false
+          }
+        ],
+        "Total": 86,
+        "Quantity": 1,
+        "Subtotal": 74.137931,
+        "UnitCode": "E48",
+        "TaxObject": "02",
+        "UnitPrice": 74.137931,
+        "Description": "Envío del pedido",
+        "ProductCode": "01010101",
+        "IdentificationNumber": "ENVIO"
+      }
+    ]
+  },
+  "huella": "f5b0281875d4b19961a6ee54b5a77c9671afecf5ff2c20b11a1fee1afb3c8433",
+  "fase": "VALIDACION",
+  "Id": "hVUL-RGajG8zr0HY-TzQhw2",
+  "UUID": "1DAB6341-8FD0-42D1-8D08-E1B13A490385"
+}

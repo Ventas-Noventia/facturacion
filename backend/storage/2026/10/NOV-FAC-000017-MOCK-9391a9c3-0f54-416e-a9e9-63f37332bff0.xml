@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante
+  xmlns:cfdi="http://www.sat.gob.mx/cfd/4"
+  xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital"
+  Version="4.0"
+  Serie="FN"
+  Folio="ORD-20261028-TIVYZ"
+  Fecha="2026-10-28T18:32:47.484423+00:00"
+  FormaPago="03"
+  SubTotal="119.14"
+  Moneda="MXN"
+  Total="138.20"
+  TipoDeComprobante="I"
+  Exportacion="01"
+  MetodoPago="PUE"
+  LugarExpedicion="53490">
+  <cfdi:Emisor Rfc="MALE950717M65" Nombre="NOVENTIA S.C. DE A.C." RegimenFiscal="601"/>
+  <cfdi:Receptor
+    Rfc="MALE950717M65"
+    Nombre="Edwin"
+    DomicilioFiscalReceptor="53490"
+    RegimenFiscalReceptor="616"
+    UsoCFDI="S01"/>
+  <cfdi:Conceptos>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="0707202631" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="En forma de rosa_x000D_
+Color: rosa" ValorUnitario="45.000000" Importe="45.000000" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="45.000000" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="7.200000"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="ENVIO" Cantidad="1" ClaveUnidad="E48" Unidad="Unidad de servicio" Descripcion="Envío del pedido" ValorUnitario="74.137931" Importe="74.137931" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="74.137931" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="11.862069"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+  </cfdi:Conceptos>
+  <cfdi:Impuestos TotalImpuestosTrasladados="19.06">
+    <cfdi:Traslados>
+      <cfdi:Traslado Base="119.14" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="19.06"/>
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital
+      Version="1.1"
+      UUID="MOCK-9391a9c3-0f54-416e-a9e9-63f37332bff0"
+      FechaTimbrado="2026-10-28T22:44:56.197Z"
+      RfcProvCertif="AAA010101AAA"
+      SelloCFD="SELLO_MOCK"
+      NoCertificadoSAT="00001000000000000000"
+      SelloSAT="SELLO_SAT_MOCK"/>
+  </cfdi:Complemento>
+</cfdi:Comprobante>

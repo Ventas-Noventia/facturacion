@@ -1,0 +1,58 @@
+{
+  "caso": "02-generales",
+  "prueba": "Datos generales del pedido y concepto mínimo",
+  "estado": "ERROR_HTTP",
+  "solicitud": {
+    "Date": "2026-10-29T16:03:16",
+    "Folio": "d5cc9c3f4518407daa5db6f97cde02c2",
+    "Items": [
+      {
+        "ProductCode": "10101504",
+        "Description": "PRUEBA DE INTEGRACION SANDBOX",
+        "UnitCode": "H87",
+        "Unit": "Pieza",
+        "UnitPrice": 100,
+        "Quantity": 1,
+        "Subtotal": 100,
+        "TaxObject": "02",
+        "Taxes": [
+          {
+            "Total": 16,
+            "Name": "IVA",
+            "Base": 100,
+            "Rate": 0.16,
+            "IsRetention": false
+          }
+        ],
+        "Total": 116
+      }
+    ],
+    "Serie": "NVSB",
+    "Issuer": {
+      "Rfc": "EKU9003173C9",
+      "Name": "ESCUELA KEMPER URGATE",
+      "FiscalRegime": "601"
+    },
+    "NameId": "1",
+    "CfdiType": "I",
+    "Currency": "MXN",
+    "Receiver": {
+      "Rfc": "URE180429TM6",
+      "Name": "UNIVERSIDAD ROBOTICA ESPAÑOLA",
+      "CfdiUse": "G03",
+      "TaxZipCode": "86991",
+      "FiscalRegime": "601"
+    },
+    "Exportation": "01",
+    "OrderNumber": "ad33cae4-655e-4e70-821c-6430445b058a",
+    "PaymentForm": "03",
+    "Observations": "PRUEBA SANDBOX SIN VALIDEZ FISCAL. Referencia interna: NOV-FAC-000018. Emisor y receptor de pruebas.",
+    "PaymentMethod": "PUE",
+    "ExpeditionPlace": "42501"
+  },
+  "huella": "bd320634e6de8542d4ba464fbfb91bf619799c2699aa17e8076d3aeac451034a",
+  "fase": "EMISION",
+  "http": 500,
+  "httpEmision": 500,
+  "codigo": "CONSULTAR_HTTP_LOGS"
+}

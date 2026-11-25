@@ -1,14 +1,17 @@
 {
   "name": "facturacion-dinamica-v1",
-  "version": "1.15.2",
+  "version": "1.20.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node backend/server.mjs",
-    "test": "node --test tests/*.test.mjs"
+    "start": "node --use-system-ca backend/server.mjs",
+    "test": "node --test --test-concurrency=1 tests/*.test.mjs"
   },
   "dependencies": {
-    "firebase-admin": "^14.4.0"
+    "firebase-admin": "^14.4.0",
+    "nodemailer": "^10.6.1"
   },
-  "engines": { "node": ">=18" }
+  "engines": {
+    "node": ">=22.18.0"
+  }
 }

@@ -30,7 +30,8 @@ export class SupabaseDocumentStorageService{
 
   async guardarArchivos({factura,fechaTimbrado,xmlFile,pdfFile}){
     const fecha=new Date(fechaTimbrado);
-    const folder=[String(fecha.getUTCFullYear()),String(fecha.getUTCMonth()+1).padStart(2,"0"),safe(factura.cliente?.rfc)].join("/");
+    const prefijo=factura.ambienteTimbrado==="PRODUCCION"?["produccion"]:factura.ambienteTimbrado==="SANDBOX"?["sandbox"]:[];
+    const folder=[...prefijo,String(fecha.getUTCFullYear()),String(fecha.getUTCMonth()+1).padStart(2,"0"),safe(factura.cliente?.rfc)].join("/");
     const baseName=safe(factura.folioInterno||factura.folioOrigen||factura.id);
     const xmlStoragePath=`${folder}/${baseName}.xml`;
     const pdfStoragePath=`${folder}/${baseName}.pdf`;

@@ -19,6 +19,7 @@ export class SupabaseAuthService{
     if(!response.ok){
       const error=new Error(data?.msg||data?.error_description||data?.message||"No fue posible iniciar sesión");
       error.status=response.status;
+      error.authCode=data?.error_code || data?.code;
       throw error;
     }
     return data;
@@ -26,6 +27,10 @@ export class SupabaseAuthService{
 
   login(email,password){
     return this.request("/token?grant_type=password",{method:"POST",body:{email,password}});
+  }
+
+  signup(email,password,metadata={}){
+    return this.request("/signup",{method:"POST",body:{email,password,data:metadata}});
   }
 
   refresh(refreshToken){

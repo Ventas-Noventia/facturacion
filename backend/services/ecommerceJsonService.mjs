@@ -1,3 +1,4 @@
+import { descripcionProducto, claveSatProducto } from "./productoFiscalService.mjs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -5,8 +6,9 @@ const dir = path.dirname(fileURLToPath(import.meta.url));
 const file = path.join(dir, "..", "data", "ecommerce-pedidos.json");
 
 export class EcommerceJsonService {
+  constructor({filePath=file}={}){this.filePath=filePath;}
   async obtenerPedido(folio) {
-    const data = JSON.parse(await fs.readFile(file, "utf8"));
+    const data = JSON.parse(await fs.readFile(this.filePath, "utf8"));
     const raw = data.find(x => String(x.orderId).toUpperCase() === String(folio).trim().toUpperCase());
     if (!raw) return null;
 
@@ -25,7 +27,8 @@ export class EcommerceJsonService {
         const final = Number(i.unitPrice) * (1 - Number(i.discountPercent || 0)/100);
         return {
           clave: i.sku,
-          descripcion: i.name,
+          descripcion: descripcionProducto(i),
+          claveProdServSat: claveSatProducto(i),
           cantidad: Number(i.qty),
           precioUnitarioOriginal: Number(i.unitPrice),
           descuentoPorcentaje: Number(i.discountPercent || 0),

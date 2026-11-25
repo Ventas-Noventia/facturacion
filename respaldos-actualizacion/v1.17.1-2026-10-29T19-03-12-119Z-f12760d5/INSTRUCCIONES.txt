@@ -1,0 +1,101 @@
+CORRECCIÓN 1.17.1 — GUARDADO DE BORRADORES
+
+1. Detén npm start con Ctrl+C.
+2. Copia el NUEVO instalar.mjs incluido al proyecto, reemplazando el anterior.
+3. Ejecuta node ./instalar.mjs .
+4. Ejecuta npm start y recarga el dashboard con Cmd+Shift+R.
+5. Verifica en /api/health: version 1.17.1 y pac facturama_sandbox.
+6. Revisa Historial y vuelve a guardar solo si el borrador no quedó registrado.
+7. Si vuelve a fallar, comparte el mensaje completo que aparece en el formulario
+   y la línea Error de facturación de la Terminal, si existe.
+
+Se conservaron la configuración de Facturama, .env y las credenciales. No hay
+SQL nuevo ni dependencias nuevas. No se consulta ni se timbra en Facturama al
+instalar esta corrección.
+
+ACTUALIZACIÓN 1.17.1 — FACTURAMA SANDBOX
+
+Si tu proyecto ya funciona en 1.16.4:
+1. Detén npm start con Ctrl+C.
+2. Sustituye el instalar.mjs anterior por el NUEVO archivo incluido.
+3. Desde tu proyecto: node ./instalar.mjs .
+4. Agrega a tu .env existente: TIMBRADO_PROVIDER=facturama_sandbox
+   Conserva FACTURAMA_USERNAME y FACTURAMA_PASSWORD, ya verificadas.
+5. Ejecuta npm start. Recarga el dashboard y verifica el aviso Facturama Sandbox.
+6. En Historial, timbra un BORRADOR de un pedido disponible con Timbrar en Sandbox.
+7. Descarga XML y PDF. Son de prueba, sin validez fiscal.
+
+El instalador respalda los archivos anteriores y conserva .env, credenciales,
+datos, documentos y node_modules. No ejecuta SQL ni necesita npm install.
+No repitas migraciones ya instaladas. La cancelación Facturama y la producción
+con los CSD reales de NOVENTIA quedan pendientes.
+
+Consulta FACTURAMA_SANDBOX.md para recuperación y detalles.
+
+INSTRUCCIONES DE LA BASE ANTERIOR (solo si partes de una versión anterior):
+FACTURACION NOVENTIA v1.16.4 - ACTUALIZACION ACUMULADA DESDE v1.15.2
+
+CORRECCION DEL ERROR DE ARRANQUE
+El servidor de v1.16.4 depende de archivos introducidos en versiones previas,
+incluido backend/services/portalFacturasService.mjs. El parche anterior incluia
+solo los cambios desde v1.16.3. Este paquete incluye TODOS los archivos cambiados
+desde la base v1.15.2, sin necesitar instalar los parches intermedios.
+
+Conserva la configuracion de la API que ya funciona. No requiere npm install.
+
+INSTALACION RECOMENDADA DEL PAQUETE ACUMULADO
+1. Deten el servidor con Ctrl+C.
+2. Descomprime actualizacion-acumulada-noventia-v1.16.4.zip en Descargas.
+3. Desde Terminal ejecuta el instalador indicando la carpeta EXISTENTE:
+   node ~/Downloads/actualizacion-acumulada-noventia-v1.16.4/instalar.mjs "/Users/papu/Documents/Noventia/DashboardFacturacion/facturacion-dinamica-v1.11.1"
+4. El instalador verifica los archivos y respalda los archivos de codigo que va a
+   reemplazar. Copia archivos individuales y agrega los que faltan. Conserva
+   .env, credenciales, backend/data, backend/storage y node_modules.
+5. Dentro de la carpeta de tu proyecto ejecuta npm start.
+6. Debe mostrar facturacion-dinamica-v1@1.16.4 y Facturacion: http://localhost:3000.
+
+Si tu navegador coloca la descarga en otra carpeta, ajusta solo la ruta del
+instalador. La carpeta de proyecto es la que ya usas; no hay que renombrarla.
+El instalador no inicia servidores, ejecuta SQL, instala paquetes ni despliega.
+
+INSTALACION MANUAL (ALTERNATIVA)
+Dentro del paquete, archivos/ contiene las rutas relativas del proyecto.
+Copia los archivos individuales a sus mismas rutas. No reemplaces las carpetas
+backend o public completas. Los archivos de aplicacion actualizados son:
+  backend/repositories/facturaDuplicadaError.mjs
+  backend/repositories/localFacturaRepository.mjs
+  backend/repositories/supabaseFacturaRepository.mjs
+  backend/server.mjs
+  backend/services/ecommerceApiService.mjs
+  backend/services/ecommerceVentaService.mjs
+  backend/services/mockTimbradoService.mjs
+  backend/services/pdfFacturaService.mjs
+  backend/services/pedidosService.mjs
+  backend/services/portalFacturasService.mjs
+  backend/services/simplePdfService.mjs
+  public/app.js
+  public/portal.css
+  public/portal.html
+  public/portal.js
+  shared/domain/calculos.mjs
+
+Incluye package.json y package-lock.json para mostrar la version correcta;
+no cambian las dependencias. Los tests, SQL y guias se pueden copiar respetando
+sus rutas. El manifiesto del paquete enumera exactamente los archivos incluidos.
+
+SUPABASE DESPUES DE COMPROBAR EL ARRANQUE
+1. En Supabase > SQL Editor ejecuta supabase/revisar_duplicados_pedidos.sql.
+   Es solo lectura. Las DOS consultas deben devolver cero filas.
+2. Si aparecen filas, revisa esas facturas; no elimines registros para continuar.
+3. Si ambas estan vacias, ejecuta supabase/012_facturas_pedido_activo.sql en otra
+   consulta. No repitas schema.sql ni las migraciones antiguas 005 u 008.
+La migracion es una transaccion que crea indices para una factura activa por
+folio y por ID API. Sustituye el indice antiguo que bloqueaba tambien canceladas.
+No modifica ni elimina facturas. Ningun SQL remoto fue ejecutado por este paquete.
+
+VALIDACION
+Sigue VALIDACION_COMPRAS.md. Las pruebas npm test usan datos simulados y no
+necesitan credenciales reales. El timbrado sigue siendo MOCK, sin valor fiscal.
+El bloqueo de operaciones protege un proceso de la aplicacion; los indices de
+Supabase protegen la creacion de duplicados entre instancias. El futuro PAC
+necesita ademas idempotencia y conciliacion antes de operar en produccion.

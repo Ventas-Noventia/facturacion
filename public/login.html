@@ -11,8 +11,8 @@
     <div class="login-card">
       <div class="login-mark">N</div>
       <p class="login-brand">NOVENTIA</p>
-      <h2>Facturación</h2>
-      <p class="login-copy">Ingresa con tu cuenta para continuar.</p>
+      <h2>Facturación interna</h2>
+      <p class="login-copy">Acceso para personal de Noventia.</p>
       <form id="loginForm">
         <label>Correo electrónico
           <input id="loginEmail" type="email" autocomplete="username" required autofocus>
@@ -23,8 +23,10 @@
         <button id="loginButton" type="submit">Iniciar sesión</button>
         <p id="loginMensaje" class="form-message" role="alert"></p>
       </form>
+      <p class="login-switch">¿Eres cliente? <a href="/portal-login.html">Genera tu factura aquí</a></p>
     </div>
   </main>
   <script type="module" src="/login.js"></script>
+  <script type="module" src="/consent.js"></script>
 </body>
 </html>

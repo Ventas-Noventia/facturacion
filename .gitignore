@@ -13,3 +13,5 @@ backups/
 *.key
 *.pem
 *.pfx
+credenciales/npm start
+/credenciales/firebase-admin.json

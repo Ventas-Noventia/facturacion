@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { randomUUID } from "node:crypto";
 import { crearPdfFactura } from "./simplePdfService.mjs";
 
 const dir=path.dirname(fileURLToPath(import.meta.url));
@@ -15,6 +16,7 @@ const esc=v=>String(v??"")
   .replaceAll(">","&gt;");
 
 function conceptoXml(c){
+  const importeConcepto=v=>Number(v||0).toFixed(c.precisionCalculo===6?6:2);
   const cantidad=Number(c.cantidad||0);
   const valorUnitario=Number(c.precioUnitario||0);
   const importe=Number(c.calculo?.subtotal ?? cantidad*valorUnitario);
@@ -26,11 +28,11 @@ function conceptoXml(c){
   const impuestos=tasa>0 ? `
       <cfdi:Impuestos>
         <cfdi:Traslados>
-          <cfdi:Traslado Base="${money(importe)}" Impuesto="002" TipoFactor="Tasa" TasaOCuota="${tasa.toFixed(6)}" Importe="${money(impuesto)}"/>
+          <cfdi:Traslado Base="${importeConcepto(importe)}" Impuesto="002" TipoFactor="Tasa" TasaOCuota="${tasa.toFixed(6)}" Importe="${importeConcepto(impuesto)}"/>
         </cfdi:Traslados>
       </cfdi:Impuestos>` : "";
 
-  return `    <cfdi:Concepto ClaveProdServ="${claveProdServ}" NoIdentificacion="${esc(c.sku||c.clave||"")}" Cantidad="${cantidad}" ClaveUnidad="${esc(c.claveUnidad||"H87")}" Unidad="${esc(c.unidad||"Pieza")}" Descripcion="${esc(c.descripcion||"Producto")}" ValorUnitario="${money(valorUnitario)}" Importe="${money(importe)}" ObjetoImp="${objetoImp}">
+  return `    <cfdi:Concepto ClaveProdServ="${claveProdServ}" NoIdentificacion="${esc(c.sku||c.clave||"")}" Cantidad="${cantidad}" ClaveUnidad="${esc(c.claveUnidad||"H87")}" Unidad="${esc(c.unidad||"Pieza")}" Descripcion="${esc(c.descripcion||"Producto")}" ValorUnitario="${importeConcepto(valorUnitario)}" Importe="${importeConcepto(importe)}" ObjetoImp="${objetoImp}">
 ${impuestos}
     </cfdi:Concepto>`;
 }
@@ -88,13 +90,15 @@ ${conceptos}
 }
 
 export class MockTimbradoService{
+  constructor({storageRoot=root}={}){this.storageRoot=storageRoot}
   async timbrar(f){
     const n=new Date();
-    const folder=path.join(root,String(n.getFullYear()),String(n.getMonth()+1).padStart(2,"0"));
+    const folder=path.join(this.storageRoot,String(n.getFullYear()),String(n.getMonth()+1).padStart(2,"0"));
     await fs.mkdir(folder,{recursive:true});
 
-    const folio=safe(f.folioOrigen||f.id);
-    const uuid=`MOCK-${Date.now()}`;
+    const uuid=`MOCK-${randomUUID()}`;
+    // Retrying or reissuing never overwrites an older invoice's local documents.
+    const folio=`${safe(f.folioInterno||f.id)}-${uuid}`;
     const xml=path.join(folder,`${folio}.xml`);
     const pdf=path.join(folder,`${folio}.pdf`);
 
@@ -106,8 +110,8 @@ export class MockTimbradoService{
       uuid,
       estatus:"TIMBRADA_MOCK",
       fechaTimbrado:n.toISOString(),
-      xmlRelativePath:path.relative(root,xml),
-      pdfRelativePath:path.relative(root,pdf)
+      xmlRelativePath:path.relative(this.storageRoot,xml),
+      pdfRelativePath:path.relative(this.storageRoot,pdf)
     };
   }
 }

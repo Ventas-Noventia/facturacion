@@ -21,6 +21,7 @@
       <button class="nav active" data-v="nueva">Nueva factura</button>
       <button class="nav" data-v="historial">Historial</button>
       <button class="nav" data-v="clientes">Clientes fiscales</button>
+      <button class="nav" data-v="productos">Productos y claves SAT</button>
       <button class="nav" data-v="usuarios">Usuarios</button>
       <button class="nav" data-v="reportes">Reportes</button>
       <button class="nav" data-v="auditoria">Bitácora</button>
@@ -38,6 +39,7 @@
   </aside>
 
   <main>
+    <p id="timbradoAviso" class="sandbox-notice" role="status" hidden></p>
     <section id="nueva" class="view active">
       <h2>Nueva factura</h2>
       <div class="card">
@@ -59,7 +61,13 @@
               </select>
             </label>
             <label>Folio<input id="folio"></label>
-            <label>Razón social
+            <label>Tipo de persona
+              <select id="tipoPersona">
+                <option value="FISICA">Persona física</option>
+                <option value="MORAL">Persona moral</option>
+              </select>
+            </label>
+            <label>Nombre / Razón social
               <div class="inline compact">
                 <input id="razon" value="PUBLICO EN GENERAL">
                 <button id="buscarFiscalFactura" type="button" class="ghost">Buscar fiscal</button>
@@ -67,22 +75,17 @@
             </label>
             <label>RFC<input id="rfc" value="" placeholder="XAXX010101000"></label>
             <label>CP fiscal<input id="cp" placeholder="54700" value=""></label>
-            <label>Régimen
-              <select id="regimen">
-                <option value="616">616 - Sin obligaciones fiscales</option>
-                <option value="612">612 - Persona física actividad empresarial</option>
-                <option value="601">601 - General de Ley Personas Morales</option>
-              </select>
-            </label>
+            <label>Régimen fiscal<select id="regimen"></select></label>
             <label>Uso CFDI
-              <select id="uso">
+              <select required id="uso"><option value="">Selecciona el uso de CFDI</option><option value="G01">G01 - Adquisición de mercancías</option>
                 <option value="S01">S01 - Sin efectos fiscales</option>
                 <option value="G03">G03 - Gastos en general</option>
-              </select>
+              </select><small id="usoRegimenAviso" hidden>El régimen 616 no admite G03. Para esta compra revisa S01 — Sin efectos fiscales con el receptor.</small>
             </label>
             <label>Correo<input id="email" type="email"></label>
             <label>Forma de pago
-              <select id="formaPago">
+              <select id="formaPago" required>
+                <option value="">Selecciona la forma de pago real</option>
                 <option value="01">01 - Efectivo</option>
                 <option value="03" selected>03 - Transferencia</option>
                 <option value="04">04 - Tarjeta crédito</option>
@@ -97,19 +100,7 @@
               </select>
             </label>
 
-            <label>IVA
-              <div class="tax-control">
-                <label class="switch-line">
-                  <input type="checkbox" id="aplicarIva" checked>
-                  <span>Aplicar IVA</span>
-                </label>
-                <select id="tasaIva">
-                  <option value="0.16" selected>16%</option>
-                  <option value="0.08">8%</option>
-                  <option value="0">0%</option>
-                </select>
-              </div>
-            </label>
+            <label>IVA<input value="16%" disabled aria-label="IVA fijo del 16 por ciento"></label>
 
           </div>
 
@@ -117,12 +108,13 @@
             <h3>Conceptos</h3>
             <button id="add" type="button" class="ghost">+ Agregar manualmente</button>
           </div>
+          <p class="fiscal-help">Las claves SAT de cada producto o servicio, incluido el envío, deben corresponder a la compra. En producción no se asignan automáticamente.</p>
           <div id="conceptos"></div>
           <div id="totales" class="stats"></div>
           <div class="saveFactura">
             <button id="btnGuardarFactura">Guardar borrador</button>
           </div>
-          <p id="mensaje"></p>
+          <p id="mensaje" role="alert" aria-live="polite"></p>
         </form>
       </div>
     </section>
@@ -135,7 +127,7 @@
           <label>Desde<input id="historialDesde" type="date"></label>
           <label>Hasta<input id="historialHasta" type="date"></label>
           <label>Origen<select id="historialOrigen"><option value="">Todos</option><option value="WHATSAPP">WhatsApp</option><option value="ALMACEN">Almacén</option><option value="BAZAR">Bazar</option><option value="ECOMMERCE">E-commerce</option><option value="MANUAL">Manual</option></select></label>
-          <label>Estado<select id="historialEstatus"><option value="">Todos</option><option value="BORRADOR">Borrador</option><option value="TIMBRADA_MOCK">Timbrada mock</option><option value="TIMBRADA">Timbrada</option><option value="CANCELADA_MOCK">Cancelada mock</option></select></label>
+          <label>Estado<select id="historialEstatus"><option value="">Todos</option><option value="BORRADOR">Borrador</option><option value="TIMBRADA_SANDBOX">Facturama Sandbox</option><option value="TIMBRANDO_SANDBOX">Consultando Sandbox</option><option value="REVISION_SANDBOX">Resultado por confirmar</option><option value="TIMBRADA_MOCK">Timbrada mock</option><option value="TIMBRADA">CFDI real</option><option value="TIMBRANDO_PRODUCCION">Emisión real en curso</option><option value="REVISION_PRODUCCION">Resultado real por confirmar</option><option value="CANCELACION_PRODUCCION">Cancelación real en proceso</option><option value="CANCELADA">Cancelada · producción</option><option value="CANCELACION_SANDBOX">Cancelación en proceso</option><option value="CANCELADA_SANDBOX">Cancelada Sandbox</option><option value="CANCELADA_MOCK">Cancelada mock</option></select></label>
           <label>Firebase<select id="historialSync"><option value="">Todos</option><option value="SINCRONIZADO">Sincronizado</option><option value="LIBERADO">Liberado por cancelación</option><option value="ERROR">Con error</option><option value="PENDIENTE">Pendiente</option><option value="NO_APLICA">No aplica</option></select></label>
           <button id="limpiarFiltrosHistorial" type="button" class="ghost">Limpiar</button>
           <button id="exportarHistorial" type="button" class="export-report"><i class="fa-solid fa-file-excel"></i> Exportar</button>
@@ -153,18 +145,12 @@
           <label>Tipo de persona
             <select id="cfTipoPersona"><option value="FISICA">Persona física</option><option value="MORAL">Persona moral</option></select>
           </label>
-          <label>Razón social<input id="cfRazon"></label>
+          <label>Nombre / Razón social<input id="cfRazon"></label>
           <label>RFC<input id="cfRfc"></label>
           <label>CP fiscal<input id="cfCp"></label>
-          <label>Régimen
-            <select id="cfRegimen">
-              <option value="612">612 - Persona física actividad empresarial</option>
-              <option value="616">616 - Sin obligaciones fiscales</option>
-              <option value="601">601 - General de Ley Personas Morales</option>
-            </select>
-          </label>
+          <label>Régimen fiscal<select id="cfRegimen"></select></label>
           <label>Uso CFDI
-            <select id="cfUso"><option value="G03">G03 - Gastos en general</option><option value="S01">S01 - Sin efectos fiscales</option></select>
+            <select required id="cfUso"><option value="">Selecciona el uso de CFDI</option><option value="G01">G01 - Adquisición de mercancías</option><option value="G03">G03 - Gastos en general</option><option value="S01">S01 - Sin efectos fiscales</option></select><small id="cfUsoAviso" hidden>El régimen 616 no admite G03. Confirma S01 — Sin efectos fiscales.</small>
           </label>
           <label>Correo<input id="cfEmail" type="email"></label>
           <div class="saveFactura item-client">
@@ -197,7 +183,8 @@
           <label>Desde<input id="reporteDesde" type="date"></label>
           <label>Hasta<input id="reporteHasta" type="date"></label>
           <label>Origen<select id="reporteFiltroOrigen"><option value="">Todos</option><option value="WHATSAPP">WhatsApp</option><option value="ALMACEN">Almacén</option><option value="BAZAR">Bazar</option><option value="ECOMMERCE">E-commerce</option><option value="MANUAL">Manual</option></select></label>
-          <label>Estado<select id="reporteFiltroEstatus"><option value="">Todos</option><option value="BORRADOR">Borrador</option><option value="TIMBRADA_MOCK">Timbrada mock</option><option value="TIMBRADA">Timbrada</option><option value="CANCELADA_MOCK">Cancelada mock</option></select></label>
+          <label>Ambiente<select id="reporteAmbiente"><option value="PRODUCCION">Producción</option><option value="PRUEBAS">Pruebas</option><option value="TODOS">Todos</option></select></label>
+          <label>Estado<select id="reporteFiltroEstatus"><option value="">Todos</option><option value="BORRADOR">Borrador</option><option value="TIMBRADA_SANDBOX">Facturama Sandbox</option><option value="TIMBRANDO_SANDBOX">Consultando Sandbox</option><option value="REVISION_SANDBOX">Resultado por confirmar</option><option value="TIMBRADA_MOCK">Timbrada mock</option><option value="TIMBRADA">CFDI real</option><option value="TIMBRANDO_PRODUCCION">Emisión real en curso</option><option value="REVISION_PRODUCCION">Resultado real por confirmar</option><option value="CANCELACION_PRODUCCION">Cancelación real en proceso</option><option value="CANCELADA">Cancelada · producción</option><option value="CANCELACION_SANDBOX">Cancelación en proceso</option><option value="CANCELADA_SANDBOX">Cancelada Sandbox</option><option value="CANCELADA_MOCK">Cancelada mock</option></select></label>
           <button id="btnAplicarReporte" type="button">Aplicar</button>
           <button id="btnLimpiarReporte" type="button" class="ghost">Limpiar</button>
           <button id="btnExportarReporte" type="button" class="export-report"><i class="fa-solid fa-file-excel"></i> Descargar CSV</button>
@@ -217,7 +204,7 @@
       <div class="card">
         <div class="audit-filters">
           <label class="audit-search">Buscar<input id="buscarAuditoria" placeholder="Factura, pedido o usuario"></label>
-          <label>Movimiento<select id="auditoriaAccion"><option value="">Todos</option><option value="CREACION">Creación</option><option value="EDICION">Edición</option><option value="TIMBRADO">Timbrado</option><option value="CANCELACION">Cancelación</option><option value="ELIMINACION">Eliminación</option><option value="DESCARGA_DOCUMENTO">Descarga</option><option value="SINCRONIZACION_FIREBASE">Sincronización Firebase</option></select></label>
+          <label>Movimiento<select id="auditoriaAccion"><option value="">Todos</option><option value="CREACION">Creación</option><option value="EDICION">Edición</option><option value="TIMBRADO">Timbrado</option><option value="RECUPERACION_SANDBOX">Consulta Sandbox</option><option value="REINTENTO_SANDBOX">Reintento Sandbox</option><option value="CANCELACION">Cancelación</option><option value="CONSULTA_CANCELACION_SANDBOX">Consulta de cancelación</option><option value="ELIMINACION">Eliminación</option><option value="DESCARGA_DOCUMENTO">Descarga</option><option value="SINCRONIZACION_FIREBASE">Sincronización Firebase</option></select></label>
           <label>Desde<input id="auditoriaDesde" type="date"></label>
           <label>Hasta<input id="auditoriaHasta" type="date"></label>
           <button id="btnBuscarAuditoria" type="button">Consultar</button>
@@ -229,14 +216,36 @@
       </div>
     </section>
 
+    <section id="productos" class="view">
+      <h2>Productos y claves SAT</h2>
+      <div class="card"><p>Guarda la clasificación una sola vez por SKU. Los pedidos siguientes cargarán el título y las claves guardadas. Revisa las claves antes de emitir; el formato de 8 dígitos no valida su clasificación ante el SAT.</p>
+        <div class="inline"><input id="satBuscar" placeholder="Buscar SKU, título o clave SAT"><button id="satBuscarBtn" type="button">Buscar</button><button id="satExportar" type="button">Exportar CSV</button></div>
+        <p id="satResumen" role="status"></p><div id="satTabla" style="overflow:auto"></div>
+        <div class="inline"><button id="satAnterior" type="button">Anterior</button><button id="satSiguiente" type="button">Siguiente</button></div>
+      </div>
+      <div id="satGestion" class="card" hidden><h3>Guardar producto</h3>
+        <form id="satForm"><div class="grid">
+          <label>SKU<input id="satSku" maxlength="100" required></label>
+          <label>Título del producto<input id="satTitulo" maxlength="1000" required></label>
+          <label>Clave SAT<input id="satClave" pattern="[0-9]{8}" maxlength="8" inputmode="numeric" required></label>
+          <label>Clave de unidad<input id="satUnidadClave" value="H87" pattern="[A-Za-z0-9]{2,3}" required></label>
+          <label>Unidad<input id="satUnidad" value="Pieza" maxlength="100" required></label>
+        </div><button type="submit">Guardar clasificación</button></form>
+        <h3>Carga desde Excel</h3><p>Descarga la plantilla, llénala en Excel y guárdala como CSV UTF-8. Máximo 500 filas por archivo. Los SKU existentes se actualizarán con los datos del archivo.</p>
+        <button id="satPlantilla" type="button">Descargar plantilla CSV</button>
+        <input id="satArchivo" type="file" accept=".csv,text/csv"><div id="satPreview"></div>
+        <button id="satImportar" type="button" disabled>Guardar lote revisado</button>
+      </div><p id="satMensaje" role="status"></p>
+    </section>
     <section id="config" class="view">
       <h2>Configuración fiscal</h2>
+      <div class="card"><h3>Preparación operativa</h3><button id="revisarPreparacion" type="button">Revisar pendientes</button><div id="preparacionResultado" role="status"></div></div>
       <form id="configFiscalForm" class="card">
         <p>Configura los datos del emisor. No ingreses certificados ni contraseñas en esta sección.</p>
         <div class="fiscal-readiness">
           <strong>Preparación para facturación real</strong>
-          <span class="status-pill status-pending">Pendiente de certificados y PAC</span>
-          <small>Mientras tanto, los documentos se generan claramente identificados como pruebas sin valor fiscal.</small>
+          <span id="configEstadoConexion" class="status-pill status-pending">Verifica la conexión de producción</span>
+          <small>Los accesos y sellos se configuran en el servidor. Guardar estos datos no activa emisiones ni cambia el ambiente del servidor.</small>
         </div>
         <div class="grid">
           <label>Razón social<input id="cfgRazon" required></label>
@@ -257,9 +266,28 @@
           <button id="btnGuardarConfig" type="submit">Guardar configuración</button>
         </div>
         <p id="configMensaje"></p>
+        <button id="btnVerificarProduccion" type="button" class="ghost" hidden>Verificar cuenta, CSD y emisor de producción</button>
+        <p id="estadoProduccion" role="status"></p>
       </form>
     </section>
   </main>
+</div>
+
+<div id="globalLoader" class="global-loader" hidden role="status" aria-live="polite">
+  <div class="loader-spinner" aria-hidden="true"></div>
+  <strong id="globalLoaderText">Cargando…</strong>
+</div>
+
+<div id="privacidadModal" class="modal privacy-modal" hidden role="dialog" aria-modal="true" aria-labelledby="privacidadTitulo">
+  <div class="modal-backdrop"></div>
+  <div class="success-panel privacy-panel">
+    <p class="success-eyebrow">Tu información importa</p>
+    <h2 id="privacidadTitulo">Aviso de privacidad y cookies</h2>
+    <p>Utilizamos cookies esenciales para mantener tu sesión y proteger el sistema. Consulta nuestro <a href="/aviso-privacidad.html" target="_blank" rel="noopener">aviso de privacidad</a>.</p>
+    <label class="consent-check"><input id="aceptoPrivacidad" type="checkbox"> He leído y acepto el aviso de privacidad y el uso de cookies esenciales.</label>
+    <p id="privacidadMensaje" class="form-message"></p>
+    <div class="success-actions"><button id="btnRechazarPrivacidad" type="button" class="ghost">No aceptar</button><button id="btnAceptarPrivacidad" type="button">Aceptar y continuar</button></div>
+  </div>
 </div>
 
 <div id="exitoModal" class="modal success-modal" hidden role="dialog" aria-modal="true" aria-labelledby="exitoTitulo">
@@ -283,7 +311,7 @@
     </div>
   </div>
 </div>
-<script type="module" src="app.js"></script>
+<script type="module" src="app.js?v=receptor-v1"></script>
 
 <div id="pedidoFacturadoModal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="pedidoFacturadoTitulo">
   <div id="pedidoFacturadoBackdrop" class="modal-backdrop"></div>
@@ -337,9 +365,9 @@
   <div id="cancelarFacturaBackdrop" class="modal-backdrop"></div>
   <form id="cancelarFacturaForm" class="success-panel cancel-invoice-panel">
     <div class="cancel-invoice-icon"><i class="fa-solid fa-ban"></i></div>
-    <p class="success-eyebrow cancel-invoice-eyebrow">Cancelación administrativa</p>
+    <p id="cancelarFacturaAmbiente" class="success-eyebrow cancel-invoice-eyebrow">Cancelación administrativa</p>
     <h2 id="cancelarFacturaTitulo">Cancelar factura</h2>
-    <p>La factura conservará sus documentos como evidencia y el pedido quedará disponible para refacturación.</p>
+    <p id="cancelarFacturaAviso">La factura conservará sus documentos como evidencia y el pedido quedará disponible para una nueva solicitud.</p>
     <div class="success-folio"><span>Factura</span><strong id="cancelarFacturaFolio">—</strong></div>
     <label>Motivo SAT
       <select id="cancelarFacturaMotivo" required>
@@ -372,18 +400,14 @@
       <header class="invoice-header">
         <div>
           <div class="invoice-brand">NOVENTIA</div>
-          <div class="invoice-emisor">
-            <strong>EMPRESA DE PRUEBA SA DE CV</strong><br>
-            RFC: AAA010101AAA<br>
-            Régimen fiscal: 601<br>
-            Lugar de expedición: 54700
-          </div>
+          <div id="pvEmisor" class="invoice-emisor" style="white-space:pre-line">Emisor pendiente</div>
         </div>
         <div class="invoice-titlebox">
           <div class="invoice-title">FACTURA</div>
-          <div>Serie: <strong>F</strong></div>
+          <div>Serie: <strong id="pvSerie">-</strong></div>
           <div>Folio: <strong id="pvFolio">-</strong></div>
           <div>Fecha: <strong id="pvFecha">-</strong></div>
+          <p id="pvSandbox" class="sandbox-notice" hidden>Facturama Sandbox · Sin validez fiscal. El XML y PDF usan emisor EKU9003173C9 y receptor URE180429TM6 de prueba. Esta vista conserva los datos originales del pedido.</p>
           <div>UUID: <strong id="pvUuid">PENDIENTE</strong></div>
         </div>
       </header>
@@ -427,7 +451,7 @@
         </div>
       </section>
 
-      <section class="invoice-fiscal">
+      <section id="pvFiscal" class="invoice-fiscal">
         <div class="qr-placeholder"><strong>QR</strong><small>Se genera con PAC real</small></div>
         <div class="fiscal-lines">
           <div>No. certificado emisor: <strong>PENDIENTE</strong></div>
@@ -439,7 +463,7 @@
         </div>
       </section>
 
-      <footer class="invoice-footer">Representación impresa de un CFDI · Entorno de pruebas</footer>
+      <footer id="pvFooter" class="invoice-footer">Vista previa del registro</footer>
     </article>
   </div>
 </div>

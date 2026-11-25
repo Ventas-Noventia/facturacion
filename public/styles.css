@@ -106,7 +106,7 @@ button{
 }
 .concept{
     display:grid;
-    grid-template-columns:1fr 1.7fr .5fr .7fr 1fr auto;
+    grid-template-columns:.8fr 1.5fr .45fr .7fr 1fr 1fr auto;
     gap:8px;
     margin:10px 0;
     padding:10px;
@@ -876,7 +876,7 @@ div#usuariosLista .row{
 .invoice-cancelled{margin-bottom:16px;padding:12px;border:3px solid #b42318;color:#b42318;text-align:center;font-size:1.35rem;font-weight:900;letter-spacing:.12em}
 .invoice-cancelled small{display:block;margin-top:4px;font-size:.68rem;letter-spacing:normal}
 .report-filter-card{margin-bottom:18px}
-.report-filters{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr)) auto auto auto;gap:12px;align-items:end}
+.report-filters{display:grid;grid-template-columns:repeat(5,minmax(140px,1fr)) auto auto auto;gap:12px;align-items:end}
 .report-filters button{min-height:42px;white-space:nowrap}
 .export-report{background:#087443}
 #reportes .stats{grid-template-columns:repeat(5,minmax(0,1fr))}
@@ -1075,4 +1075,16 @@ main{
         flex-direction:column;
     }
 }
+
+.global-loader{position:fixed;inset:0;z-index:3000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:rgba(245,249,252,.9);backdrop-filter:blur(4px);color:var(--color-blue)}
+.global-loader[hidden]{display:none}.loader-spinner{width:46px;height:46px;border:5px solid #dce8f1;border-top-color:var(--color-blue);border-radius:50%;animation:loader-spin .75s linear infinite}@keyframes loader-spin{to{transform:rotate(360deg)}}
+.privacy-modal{z-index:3100}.privacy-panel{max-width:580px}.consent-check{display:flex!important;flex-direction:row!important;align-items:flex-start;gap:10px;padding:14px;background:#f3f8fb;border-radius:10px}.consent-check input{width:auto;margin-top:3px}.form-message{min-height:22px;color:#b42318}.login-switch{text-align:center;margin-top:18px}.login-switch a,.privacy-panel a,.legal-card a{color:var(--color-blue);font-weight:700}.portal-register-card{max-width:720px;width:min(720px,calc(100% - 24px))}.blocked-card{text-align:center}.button-link{display:inline-flex;justify-content:center;align-items:center;background:var(--color-blue);color:#fff!important;text-decoration:none;padding:12px 18px;border-radius:9px}.legal-view{max-width:860px;margin:auto;padding:40px 20px}.legal-card{line-height:1.65}.legal-logo{width:150px;max-height:70px;object-fit:contain}.legal-warning{padding:14px;border-left:4px solid #ffb020;background:#fff7e6}
+.portal-body{background:#f2f6f9;min-height:100vh}.portal-header{height:76px;padding:10px clamp(18px,5vw,64px);display:flex;align-items:center;justify-content:space-between;background:#fff;box-shadow:0 4px 16px rgba(1,37,83,.08);position:sticky;top:0;z-index:20}.portal-header img{width:150px;max-height:55px;object-fit:contain}.portal-header>div{display:flex;align-items:center;gap:15px}.portal-main{max-width:1120px;margin:auto;padding:28px 20px 60px}.portal-tabs{display:flex;gap:8px;margin-bottom:24px;overflow:auto}.portal-tab{background:#e5edf3;color:#234;border:none;white-space:nowrap}.portal-tab.active{background:var(--color-blue);color:#fff}.portal-section{display:none}.portal-section.active{display:block}.portal-hero{padding:18px 0 10px}.portal-hero h1,.portal-section h1{margin:.25rem 0}.order-found{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}.order-found>div{display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:12px;background:#f2f7fa}.portal-products{border:1px solid #dfe8ee;border-radius:12px;margin-bottom:18px;overflow:hidden}.portal-products>div{display:flex;justify-content:space-between;gap:20px;padding:12px 15px;border-bottom:1px solid #e8eef2}.portal-products>div:last-child{border-bottom:0}.portal-payment{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}.portal-history{display:grid;gap:12px}.portal-history-item{display:flex;justify-content:space-between;align-items:center;gap:20px;background:#fff;border-radius:14px;padding:18px;box-shadow:0 5px 18px rgba(1,37,83,.07)}.portal-history-item>div{display:flex;flex-direction:column;gap:4px}.portal-history-item>div:last-child{text-align:right;align-items:flex-end}
+@media(max-width:640px){.portal-header{padding:10px 14px}.portal-header img{width:105px}.portal-header strong{display:none}.portal-main{padding:18px 12px 45px}.order-found,.portal-payment{grid-template-columns:1fr}.portal-history-item{align-items:flex-start}.portal-products>div{flex-direction:column;gap:4px}}
  
+
+/* Facturama test mode remains visible throughout the dashboard. */
+.sandbox-notice{padding:12px 16px;border:1px solid #d9ac3b;border-radius:10px;background:#fff8df;color:#684c05;font-size:14px;line-height:1.5;margin:0 0 18px}.sandbox-notice[hidden]{display:none}
+
+.production-notice{background:#edf8f0;border-color:#83bd91;color:#174b26}
+.fiscal-help{color:#536273;font-size:.9rem}

@@ -1,0 +1,27 @@
+ACTUALIZACION ACUMULADA NOVENTIA v1.17.4
+
+1. Detén el servidor con Ctrl+C.
+2. Descomprime el ZIP y copia instalar-noventia-v1.17.4.mjs junto a package.json
+   en tu proyecto existente. El instalador contiene los archivos necesarios.
+3. Desde la carpeta de tu proyecto ejecuta:
+   node ./instalar-noventia-v1.17.4.mjs .
+   npm start
+4. Confirma v1.17.4 y facturama_sandbox. Recarga con Cmd+Shift+R.
+5. En Historial, ubica la MISMA factura pendiente y pulsa:
+   Reintentar sin referencia auxiliar
+6. Si se confirma el UUID, descarga XML y PDF; si faltan, usa Recuperar documentos.
+7. Si vuelve a fallar, conserva el registro y comparte el mensaje completo.
+
+Las nuevas emisiones omiten OrderNumber, una referencia opcional no fiscal.
+El ajuste del registro anterior consulta primero Facturama: si ya existe,
+recupera ese comprobante. Solo cuando no hay resultados y la venta sigue siendo
+facturable, respalda la solicitud anterior y envía la misma solicitud omitiendo
+únicamente OrderNumber, con el mismo folio, fecha, conceptos e importes.
+El pedido continúa vinculado en el dashboard. La prueba independiente y su UUID
+no se asignan a la factura original.
+
+El instalador respalda el código anterior y conserva .env, credenciales, datos,
+documentos, node_modules y archivos ajenos al manifiesto. No requiere SQL ni
+npm install. No emite facturas ni accede a cuentas externas al instalar.
+El paquete es acumulativo desde la versión 1.15.2. La carpeta del proyecto puede
+conservar su nombre anterior. Consulta FACTURAMA_SANDBOX.md para más detalles.

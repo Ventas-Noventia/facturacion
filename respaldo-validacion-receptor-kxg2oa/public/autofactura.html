@@ -1,0 +1,20 @@
+<!doctype html><html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Autofacturación · Noventia</title><link rel="stylesheet" href="/autofactura.css"></head>
+<body><header><img src="/img/logo2.png" alt="Noventia"><a href="#atencion">Ayuda con mi factura</a></header>
+<main><h1>Genera tu factura</h1><p class="intro">Ten a la mano tu ticket y tus datos fiscales.</p>
+<form id="ticket"><h2><span>1</span> Datos del ticket</h2><div class="grid">
+<label>Folio o ID del pedido<input id="folio" required maxlength="65" placeholder="Folio de tu compra"></label>
+<label>Total del ticket (MXN)<input id="monto" type="number" min=".01" max="9999999999" step=".01" required placeholder="0.00"></label>
+<label>Correo o teléfono de la compra<input id="contacto" required maxlength="254" placeholder="El que diste al comprar"></label></div>
+<button id="buscar">Validar ticket</button><p id="estadoTicket" role="status"></p></form>
+<form id="factura"><fieldset id="campos" disabled><h2><span>2</span> Datos del receptor</h2><p>Escríbelos tal como aparecen en tu constancia de situación fiscal.</p><div class="grid">
+<label>Tipo de persona<select id="tipo"><option value="FISICA">Persona física</option><option value="MORAL">Persona moral</option></select></label>
+<label>RFC<input required id="rfc" maxlength="13" autocapitalize="characters"></label><label id="nombreLabel">Nombre completo<input id="nombre" required maxlength="254"></label>
+<label>Código postal fiscal<input id="cp" required maxlength="5" pattern="[0-9]{5}" inputmode="numeric"></label>
+<label>Régimen fiscal<select required id="regimen"></select></label><label>Uso de CFDI<select required id="uso"><option value="">Selecciona el uso</option><option value="G01">G01 · Adquisición de mercancías</option><option value="G03">G03 · Gastos en general</option><option value="S01">S01 · Sin efectos fiscales</option></select></label>
+<label>Correo de contacto<input type="email" id="email" required maxlength="254"></label>
+<label>Forma de pago<select required id="forma"><option value="">Selecciona cómo pagaste</option><option value="01">01 · Efectivo</option><option value="03">03 · Transferencia</option><option value="04">04 · Tarjeta de crédito</option><option value="28">28 · Tarjeta de débito</option></select></label>
+</div><label class="check"><input type="checkbox" required id="acepta"> <span>Revisé mis datos y acepto el <a href="/aviso-privacidad.html" target="_blank" rel="noopener">aviso de privacidad</a>.</span></label>
+<button id="emitir">Generar factura</button></fieldset><p id="estadoFactura" role="alert"></p></form>
+<section id="resultado" hidden><h2 id="titulo"></h2><p id="ref"></p><div id="archivos"></div><p id="ayudaResultado"></p><button id="otra" type="button">Facturar otra compra</button></section>
+<aside id="atencion"><h2>¿Necesitas una corrección?</h2><p>Escribe a <a id="correo" href="mailto:factura.noventia@gmail.com">factura.noventia@gmail.com</a> con el folio de tu pedido o factura e indica qué dato necesitas cambiar.</p><a id="wa" hidden>Contactar por WhatsApp</a></aside></main>
+<script type="module" src="/autofactura.js"></script></body></html>

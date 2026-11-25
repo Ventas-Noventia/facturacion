@@ -6,7 +6,8 @@ test("incluye plantilla imprimible",()=>{
   const html=fs.readFileSync(new URL("../public/index.html",import.meta.url),"utf8");
   assert.match(html,/id="facturaPrint"/);
   assert.match(html,/id="btnImprimirFactura"/);
-  assert.match(html,/Representación impresa de un CFDI/);
+  assert.match(html,/id="pvFooter"/);
+  assert.match(html,/Vista previa del registro/);
 });
 
 test("incluye vista previa desde historial",()=>{

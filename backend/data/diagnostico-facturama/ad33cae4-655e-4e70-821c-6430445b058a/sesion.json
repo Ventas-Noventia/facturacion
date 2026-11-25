@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "facturaId": "ad33cae4-655e-4e70-821c-6430445b058a",
+  "original": "09b1543a1045b9f8f5c08f3549e1a780dd14eac74927ef219716c15355898efe",
+  "baseline": "e9992fd321b8bf920435044009bf2ad76f91dcfdf03388818247b7879a7d05c2",
+  "casos": [
+    {
+      "key": "01-control"
+    },
+    {
+      "key": "02-generales"
+    },
+    {
+      "key": "03-conceptos"
+    },
+    {
+      "key": "04-folio"
+    },
+    {
+      "key": "05-serie"
+    }
+  ]
+}

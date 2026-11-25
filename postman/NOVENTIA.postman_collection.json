@@ -1,0 +1,168 @@
+{
+  "info": {
+    "name": "NOVENTIA - API de ventas para facturación",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Primero confirma HTTPS y configura el entorno local. Obtén el token, busca un folio real y consulta su detalle. Las consultas GET no modifican ventas. No compartas el entorno después de introducir secretos."
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{api_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const base=pm.variables.replaceIn('{{base_url}}');",
+          "if(!base.startsWith('https://')||base.includes('TU-DOMINIO'))throw new Error('Configura una URL HTTPS funcional antes de enviar credenciales.');",
+          "if(pm.request.method==='GET'){",
+          "  if(!pm.environment.get('api_token')||Number(pm.environment.get('api_token_expires_at')||0)<=Date.now())throw new Error('Ejecuta primero Obtener token; el token debe estar vigente.');",
+          "}"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Obtener token",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const username=pm.environment.get('api_username');",
+              "const password=pm.environment.get('api_password');",
+              "if(!username||!password)throw new Error('Configura api_username y api_password en tu entorno local.');",
+              "pm.request.body.update(JSON.stringify({username,password}));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Token HTTP 200',()=>pm.response.to.have.status(200));",
+              "pm.environment.unset('api_token');",
+              "pm.environment.unset('api_token_expires_at');",
+              "if(pm.response.code===200){",
+              "  const data=pm.response.json();",
+              "  pm.test('Respuesta del token válida',()=>{pm.expect(data.token_type).to.eql('Bearer');pm.expect(data.expires_in).to.eql(3600);pm.expect(data.access_token).to.be.a('string').and.not.empty;});",
+              "  if(data.access_token){pm.environment.set('api_token',data.access_token);pm.environment.set('api_token_expires_at',Date.now()+Number(data.expires_in)*1000-30000);}",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{base_url}}/auth/token"
+      }
+    },
+    {
+      "name": "2. Buscar venta por folio",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.environment.unset('order_id');",
+              "if(!pm.environment.get('order_number'))throw new Error('Configura order_number con un folio real.');"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Listado HTTP 200',()=>pm.response.to.have.status(200));",
+              "if(pm.response.code===200){",
+              " const data=pm.response.json();",
+              " const folio=String(pm.environment.get('order_number')).toUpperCase();",
+              " const found=(data.data||[]).find(row=>String(row.order_number).toUpperCase()===folio);",
+              " if(found)pm.environment.set('order_id',String(found.id));",
+              " pm.test('Se encontró el folio solicitado',()=>pm.expect(found).to.be.an('object'));",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/orders?order_number={{order_number}}"
+      }
+    },
+    {
+      "name": "3. Consultar detalle",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if(!/^[1-9]\\d*$/.test(String(pm.environment.get('order_id')||'')))throw new Error('Busca primero una venta para obtener su ID.');"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Detalle HTTP 200',()=>pm.response.to.have.status(200));",
+              "if(pm.response.code===200){const body=pm.response.json();pm.test('ID del pedido correcto',()=>pm.expect(String(body.data.order.id)).to.eql(String(pm.environment.get('order_id'))));}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/orders/{{order_id}}"
+      }
+    }
+  ]
+}

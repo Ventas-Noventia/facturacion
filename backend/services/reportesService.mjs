@@ -1,12 +1,14 @@
 const numero=valor=>Number.isFinite(Number(valor))?Number(valor):0;
 const redondear=valor=>Number(numero(valor).toFixed(2));
 const fechaCorta=valor=>String(valor||"").slice(0,10);
-const esTimbrada=factura=>String(factura.estatus||"").startsWith("TIMBRADA");
+const esCancelada=factura=>String(factura.estatus||"").startsWith("CANCELADA")||factura.cancelacionSandbox?.estado==="CONFIRMADA"||factura.cancelacionProduccion?.estado==="CONFIRMADA";
+const esTimbrada=factura=>!esCancelada(factura)&&(String(factura.estatus||"").startsWith("TIMBRADA")||["CANCELACION_SANDBOX","CANCELACION_PRODUCCION"].includes(factura.estatus));
 
 function aplicarFiltros(facturas,filtros={}){
   return facturas.filter(factura=>{
     const fecha=fechaCorta(factura.creadaEn);
-    return (!filtros.desde||fecha>=filtros.desde)&&(!filtros.hasta||fecha<=filtros.hasta)&&
+    const real=factura.ambienteOperacion==="PRODUCCION"||factura.ambienteTimbrado==="PRODUCCION"||factura.pac==="facturama_produccion";
+    return (!filtros.ambiente||filtros.ambiente==="TODOS"||(filtros.ambiente==="PRODUCCION"?real:!real))&&(!filtros.desde||fecha>=filtros.desde)&&(!filtros.hasta||fecha<=filtros.hasta)&&
       (!filtros.origen||(factura.origen||"MANUAL")===filtros.origen)&&(!filtros.estatus||factura.estatus===filtros.estatus);
   });
 }
@@ -27,7 +29,7 @@ export class ReportesService{
     const filtradas=aplicarFiltros(facturas,filtros);
     const timbradas=filtradas.filter(esTimbrada);
     const borradores=filtradas.filter(x=>x.estatus==="BORRADOR");
-    const canceladas=filtradas.filter(x=>String(x.estatus||"").startsWith("CANCELADA"));
+    const canceladas=filtradas.filter(esCancelada);
     return{
       filtros,totalFacturas:filtradas.length,timbradas:timbradas.length,borradores:borradores.length,canceladas:canceladas.length,
       subtotalFacturado:redondear(timbradas.reduce((s,x)=>s+numero(x.subtotal),0)),

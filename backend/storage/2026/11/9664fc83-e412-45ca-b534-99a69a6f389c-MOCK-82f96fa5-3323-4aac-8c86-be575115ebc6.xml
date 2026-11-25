@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante
+  xmlns:cfdi="http://www.sat.gob.mx/cfd/4"
+  xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital"
+  Version="4.0"
+  Serie="F"
+  Folio="TEST-ECOMMERCE"
+  Fecha="2026-11-18T16:53:56.879Z"
+  FormaPago="03"
+  SubTotal="1249.14"
+  Moneda="MXN"
+  Total="1449.00"
+  TipoDeComprobante="I"
+  Exportacion="01"
+  MetodoPago="PUE"
+  LugarExpedicion="54700">
+  <cfdi:Emisor Rfc="AAA010101AAA" Nombre="EMPRESA DE PRUEBA SA DE CV" RegimenFiscal="601"/>
+  <cfdi:Receptor
+    Rfc="XAXX010101000"
+    Nombre="PRUEBA"
+    DomicilioFiscalReceptor="53490"
+    RegimenFiscalReceptor="616"
+    UsoCFDI="G03"/>
+  <cfdi:Conceptos>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="SKU-1" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Artículo A" ValorUnitario="775.862069" Importe="775.862069" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="775.862069" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="124.137931"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="01010101" NoIdentificacion="SKU-2" Cantidad="1" ClaveUnidad="H87" Unidad="Pieza" Descripcion="Artículo B" ValorUnitario="387.931034" Importe="387.931034" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="387.931034" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="62.068965"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+    <cfdi:Concepto ClaveProdServ="78102200" NoIdentificacion="ENVIO" Cantidad="1" ClaveUnidad="E48" Unidad="Unidad de servicio" Descripcion="Envío del pedido" ValorUnitario="85.344828" Importe="85.344828" ObjetoImp="02">
+
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="85.344828" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="13.655172"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+  </cfdi:Conceptos>
+  <cfdi:Impuestos TotalImpuestosTrasladados="199.86">
+    <cfdi:Traslados>
+      <cfdi:Traslado Base="1249.14" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="199.86"/>
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital
+      Version="1.1"
+      UUID="MOCK-82f96fa5-3323-4aac-8c86-be575115ebc6"
+      FechaTimbrado="2026-11-18T16:53:56.880Z"
+      RfcProvCertif="AAA010101AAA"
+      SelloCFD="SELLO_MOCK"
+      NoCertificadoSAT="00001000000000000000"
+      SelloSAT="SELLO_SAT_MOCK"/>
+  </cfdi:Complemento>
+</cfdi:Comprobante>

@@ -1,0 +1,55 @@
+{
+  "caso": "06-combinacion",
+  "prueba": "Serie y folio alfanumérico juntos",
+  "estado": "CONFIRMADO",
+  "solicitud": {
+    "Date": "2026-10-29T16:21:03",
+    "Folio": "d21aec2c5b0f452caa180622ba3401b6",
+    "Items": [
+      {
+        "ProductCode": "10101504",
+        "Description": "PRUEBA DE INTEGRACION SANDBOX",
+        "UnitCode": "H87",
+        "Unit": "Pieza",
+        "UnitPrice": 100,
+        "Quantity": 1,
+        "Subtotal": 100,
+        "TaxObject": "02",
+        "Taxes": [
+          {
+            "Total": 16,
+            "Name": "IVA",
+            "Base": 100,
+            "Rate": 0.16,
+            "IsRetention": false
+          }
+        ],
+        "Total": 116
+      }
+    ],
+    "Serie": "NVSB",
+    "Issuer": {
+      "Rfc": "EKU9003173C9",
+      "Name": "ESCUELA KEMPER URGATE",
+      "FiscalRegime": "601"
+    },
+    "NameId": 1,
+    "CfdiType": "I",
+    "Currency": "MXN",
+    "Receiver": {
+      "Rfc": "URE180429TM6",
+      "Name": "UNIVERSIDAD ROBOTICA ESPAÑOLA",
+      "CfdiUse": "G01",
+      "TaxZipCode": "86991",
+      "FiscalRegime": "601"
+    },
+    "Exportation": "01",
+    "PaymentForm": "03",
+    "PaymentMethod": "PUE",
+    "ExpeditionPlace": "42501"
+  },
+  "huella": "f78beadf77e69ae447c7b75c2d331d4915c5a576526f7a0a60940f7483e8a415",
+  "fase": "VALIDACION",
+  "Id": "VA-5VlLGhP297_vRUsZ19g2",
+  "UUID": "2C2C3D29-1A4D-4CA3-9988-2070C9DE8CCA"
+}

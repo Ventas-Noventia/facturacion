@@ -1,0 +1,274 @@
+{
+  "version": "1.18.0",
+  "minimum_base_version": "1.15.2",
+  "files": [
+    {
+      "path": "FACTURAMA_PRODUCCION.env.example",
+      "sha256": "61126d6a527ad6fbb940b97ce508d85e9a553b754526f2de40372a991ea84a82"
+    },
+    {
+      "path": "FACTURAMA_PRODUCCION.md",
+      "sha256": "c7cd77ce8c254962d5abd649272d7287db8dd26a156998934a9aa691b9e64629"
+    },
+    {
+      "path": "FACTURAMA_SANDBOX.md",
+      "sha256": "6b1d3b5ba42917a13511c5cb3a92d98b4be9050273b340eb47976b4148b64c68"
+    },
+    {
+      "path": "INSTRUCCIONES.txt",
+      "sha256": "9fee428ebdad96d886e293483c0f416c8564fd3d029e7f4ba7cbf94c51c13d2c"
+    },
+    {
+      "path": "INTEGRACION_API.md",
+      "sha256": "274984ac25be482a7547009fdf41779f5843e8135b8f79b30f1c7b352c4c1864"
+    },
+    {
+      "path": "README.md",
+      "sha256": "cc4f09951f02b72d7d1a93ba9bd8ce87682135eca229dce6376f34f5ef8889ca"
+    },
+    {
+      "path": "VALIDACION_COMPRAS.md",
+      "sha256": "1584451dec6fd477fb050436512ba60debbfcbe3ebb9ab37539a76ec9771981f"
+    },
+    {
+      "path": "backend/config/timbrado.mjs",
+      "sha256": "e54ca8931e6047d2727ff5745b6cc73f212fde55934d2f5da2d2e3b48c940df4"
+    },
+    {
+      "path": "backend/repositories/facturaDuplicadaError.mjs",
+      "sha256": "8dda7af8a98499e1d8943a1cdb2b998486726e7924dc72900fb4b2df78be43fb"
+    },
+    {
+      "path": "backend/repositories/localFacturaRepository.mjs",
+      "sha256": "d8eebe50c8991d60dd1fb7e54a89d916be138b44882004dd19bd33bfad595508"
+    },
+    {
+      "path": "backend/repositories/supabaseFacturaError.mjs",
+      "sha256": "a960ceb105d4a2e973aaf35f105429448169b678a4f18f1f9df520c731934707"
+    },
+    {
+      "path": "backend/repositories/supabaseFacturaRepository.mjs",
+      "sha256": "bcdf3719e426cfdb528df7829bb296514229530baaa59c6217e7fc1f679d1f78"
+    },
+    {
+      "path": "backend/security/diagnosticoError.mjs",
+      "sha256": "a265cc0c8dcd6acf21d3df9113bb16f12d0c473b4f22a0d64aa11f09291a0ea9"
+    },
+    {
+      "path": "backend/server.mjs",
+      "sha256": "7ec15a7563017074350d7046357ca6b1fc0483ecdf08ad5838bdb4cf7ba4b347"
+    },
+    {
+      "path": "backend/services/cancelacionProduccionService.mjs",
+      "sha256": "c8ec31b155e9618fb71e9479d4cf55de68988309dc39ce53282ed123ac8422e0"
+    },
+    {
+      "path": "backend/services/cancelacionSandboxService.mjs",
+      "sha256": "4a52f286fb0fc593887e80e4cb3f7e93dc19255a1e860572996bf378d5844284"
+    },
+    {
+      "path": "backend/services/ecommerceApiService.mjs",
+      "sha256": "95ead151df933098192c1e54967534925292ec8db9664dcd6a0226aad8b706ed"
+    },
+    {
+      "path": "backend/services/ecommerceVentaService.mjs",
+      "sha256": "dac135daf294f56f1af9ab05329cd52ded9c399d29ec016e14d27f0149a91569"
+    },
+    {
+      "path": "backend/services/facturamaProduccionService.mjs",
+      "sha256": "c98a6295f8027514a67cc112acf8981101cb91c4018edf1cad7bddb9a0f45101"
+    },
+    {
+      "path": "backend/services/facturamaSandboxService.mjs",
+      "sha256": "88ca6b6cc9bfaec58a7d4e10d04cc254a6a35daab15204690723187c4e95f700"
+    },
+    {
+      "path": "backend/services/firebaseJsonService.mjs",
+      "sha256": "2bc7ed87735c268ee6f9c749d594a8854f6f7addd10d57b21484406acbf8eac6"
+    },
+    {
+      "path": "backend/services/huellaSandbox.mjs",
+      "sha256": "63cb756c6148cd256ee6f6adf60a4969e5183a79d7cd69889eab96632e30cc3a"
+    },
+    {
+      "path": "backend/services/mockTimbradoService.mjs",
+      "sha256": "d45063a4f5ea6ba4f6fc05bcea002a25faa260f223209b8d242f6cca81e35ccd"
+    },
+    {
+      "path": "backend/services/pdfFacturaService.mjs",
+      "sha256": "ec8db4fc0ddcb2480318b63695687eedb1ff57690c5c781629797995754a1826"
+    },
+    {
+      "path": "backend/services/pedidoProduccionService.mjs",
+      "sha256": "9b399fa4edc63fa9773d7ea1e842fb7154ecac8b643c44cc51bac32a926bdf6d"
+    },
+    {
+      "path": "backend/services/pedidosService.mjs",
+      "sha256": "de32508d3746d1f9bdc5c184ee27918988285b020860e4ebeaa886a2fbbcdb87"
+    },
+    {
+      "path": "backend/services/portalFacturasService.mjs",
+      "sha256": "b31c208b1bd2a5ae9be73a9f075af17727a974946b8cf1f45e484c663412bba5"
+    },
+    {
+      "path": "backend/services/produccionFiscal.mjs",
+      "sha256": "78947458aa120c9fd1c202e2a6da73251d6ba8875cb73a6827fe7a64f5c2f46d"
+    },
+    {
+      "path": "backend/services/reportesService.mjs",
+      "sha256": "193b495459f557df357bb1db35d6f1ed5d3139f633784eeaeb09d09ceec0b887"
+    },
+    {
+      "path": "backend/services/simplePdfService.mjs",
+      "sha256": "71388aa4a2413718b2e85cf08155cd9b2fef14368af03e9358bc9eeb719a4fe3"
+    },
+    {
+      "path": "backend/services/supabaseDocumentStorageService.mjs",
+      "sha256": "64aeb576c4553271d016bb9f4fa1a49558d0facd08a21adca682f0c8330c8144"
+    },
+    {
+      "path": "backend/services/timbradoProduccionService.mjs",
+      "sha256": "f2f635366dd68495af3afabaabd4fb1b2a44687eec681f17adc75699269b8406"
+    },
+    {
+      "path": "backend/services/timbradoSandboxService.mjs",
+      "sha256": "da0d37010079374a26047d58fe13276f02518f452f993ed11f6417d89e2a3ab1"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "0b746653867ff378bc164c819364557cb9ab76e0da5fd646bed3731e476e9d4f"
+    },
+    {
+      "path": "package.json",
+      "sha256": "4d3843e2731879f34b9d80a5159c39c7456751cf7b62b335c7f898b67128bbe6"
+    },
+    {
+      "path": "preparar-facturama-produccion.mjs",
+      "sha256": "1b7f58f04ca2fcd9d6d764f41e6d32f6443d77c98b65b0b5af3726b85abf651b"
+    },
+    {
+      "path": "public/app.js",
+      "sha256": "aea3b851ca80bfc7033dd34b96756a77877cdacdcf3ff4da217fffdeec3347e7"
+    },
+    {
+      "path": "public/index.html",
+      "sha256": "9e2080487564a85778b2dbe4b335d3c4d6f2edf10b5a3f344c8992ab53852cf9"
+    },
+    {
+      "path": "public/portal.css",
+      "sha256": "3951bd43ba84a23a8d7eea43b545f2e27f3e326cf6cce6f2261a2ec970f8bcfa"
+    },
+    {
+      "path": "public/portal.html",
+      "sha256": "253140096b00a17d8a52c63f4755d9d62bdae11b240a29e57ffdc301d10cc7f3"
+    },
+    {
+      "path": "public/portal.js",
+      "sha256": "b2240006943afb686e2fb6dd17e00e082d06ac93eb630cad6ab50982ddb019c0"
+    },
+    {
+      "path": "public/styles.css",
+      "sha256": "1e80c128b4b45de963bf0ead473774ee60350afeb94819c1e927b296f9863a7c"
+    },
+    {
+      "path": "shared/domain/calculos.mjs",
+      "sha256": "9a59e50e2fd84c7379da8f956af8b714f42f416954794a234d1eb7c6c2d57c95"
+    },
+    {
+      "path": "shared/domain/factura.mjs",
+      "sha256": "49573198d6e79c8ca10dd77dc130945dbf13fb402bc338fb7b52f408be38f289"
+    },
+    {
+      "path": "shared/domain/validaciones.mjs",
+      "sha256": "525ce2bfdc191a1dce07715f786cf4d644a248fc3f6e924ce25bd6d16ecbb356"
+    },
+    {
+      "path": "supabase/012_facturas_pedido_activo.sql",
+      "sha256": "078263b4558fb5c88ed239841f34195635d92bcf6ab02ec785a3ad60fe10153f"
+    },
+    {
+      "path": "supabase/revisar_duplicados_pedidos.sql",
+      "sha256": "671037a8200a014cf3152ffb9d81e65a0cb1c293c820afb300568fb2eb4dcdef"
+    },
+    {
+      "path": "tests/cancelacion-sandbox.test.mjs",
+      "sha256": "1d7dc4917e8fe5c11548e530b55887b64bfbb459be267f110d01378e65cad0d2"
+    },
+    {
+      "path": "tests/ecommerce-api.test.mjs",
+      "sha256": "d45836d71b22c36e0f29de3f34c02a550e3a6687bb11954dad9c57d1f0373e38"
+    },
+    {
+      "path": "tests/ecommerce-venta.test.mjs",
+      "sha256": "0e87b39b0032b89e4be5be8524dd760c785bb16f53d1341bb0f7175dc580618a"
+    },
+    {
+      "path": "tests/errores-borrador.test.mjs",
+      "sha256": "d50b7214c5c7c1e07bef0332d6b9859c5191565a0671c5585ce6e7340b87753b"
+    },
+    {
+      "path": "tests/facturama-http.test.mjs",
+      "sha256": "b8abf01b17d024e90efd131f28c6716ebe27471b3812083304816cb8467252c4"
+    },
+    {
+      "path": "tests/facturama-sandbox.test.mjs",
+      "sha256": "f3b83ae8fd24a92a050dcc3e05cdd5fc5617c6f9c2ea30a22317148d49354013"
+    },
+    {
+      "path": "tests/facturas-duplicadas.test.mjs",
+      "sha256": "935accd4b294754fe2e521eadcb70025ab1d0f9580162e3e968864a479c5b9c0"
+    },
+    {
+      "path": "tests/fixtures/ecommerce.mjs",
+      "sha256": "f4882ba4b9ef8b9aa2f884b6ac209f4b866cecb2311f2eb61157d58f1c6b1d02"
+    },
+    {
+      "path": "tests/fixtures/portalServidor.mjs",
+      "sha256": "9537ffab46748cf5da9b9e3429484693a9fbd81369d9fd71e17c1a4e4df07181"
+    },
+    {
+      "path": "tests/fixtures/ventaServidor.mjs",
+      "sha256": "49be9846eb475982b5bdc3e8f33d9b0538a919a1448a2bfc7330e3d587023109"
+    },
+    {
+      "path": "tests/historial-ui.test.mjs",
+      "sha256": "c629d9135af36342cdeb7d6351ee3f7b01f0a6495afc1445981785e9352ccef4"
+    },
+    {
+      "path": "tests/huella-sandbox.test.mjs",
+      "sha256": "46883d1ee42c53f5d172bd9c77e93bdd0f215fe80620dc3d1dea2cc64f269f82"
+    },
+    {
+      "path": "tests/pdf-factura.test.mjs",
+      "sha256": "4cab68b3d5ebceeaef2ea6dc19db86eb5e643c382dfb78bf29ba72453ce04258"
+    },
+    {
+      "path": "tests/portal-facturas.test.mjs",
+      "sha256": "443c165817ebc5a4d74fe96217cae8212377c74ea40dc2306c5cbc8097fa2f5e"
+    },
+    {
+      "path": "tests/portal-http.test.mjs",
+      "sha256": "97649061170713e9d6a346bbb68c9e809465393dff3a9f3a78e1bab28afa5116"
+    },
+    {
+      "path": "tests/produccion.test.mjs",
+      "sha256": "35c0cf9e3bae80709b9fb982849c52109eac1274fade6a08ac5831e07b6e68ba"
+    },
+    {
+      "path": "tests/referencia-sandbox.test.mjs",
+      "sha256": "1537fc00c8441908ea06450c35af8d4e2cd2fa84c769b49e58570c069f513117"
+    },
+    {
+      "path": "tests/reintento-sandbox.test.mjs",
+      "sha256": "a29e481e2be131faabbad96e396da16ea0e03428dc2bbce851abdb367737fbc7"
+    },
+    {
+      "path": "tests/tres-fuentes.test.mjs",
+      "sha256": "4fe8607731236c5efcb2908dfb8b3624f3b9fcaadd7ea72f0ab444443a568667"
+    },
+    {
+      "path": "tests/venta-flujo-http.test.mjs",
+      "sha256": "e4c8bbbfb0d7138fcacb4b1d088a362d06b29d0d906dd6db8df5f403b2469e13"
+    }
+  ]
+}

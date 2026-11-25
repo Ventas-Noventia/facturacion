@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mis facturas · Noventia</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/portal.css?v=1.20.0">
+</head>
+<body class="portal-body">
+  <header class="portal-header">
+    <a href="/portal.html" aria-label="Inicio del portal Noventia"><img src="/img/logo2.png" alt="Noventia"></a>
+    <div><strong id="portalNombre">Mi cuenta</strong><button id="portalLogout" type="button" class="ghost">Cerrar sesión</button></div>
+  </header>
+  <main class="portal-main">
+    <nav class="portal-tabs" aria-label="Secciones de mi cuenta">
+      <button type="button" class="portal-tab active" data-section="portalNueva" aria-current="page">Generar factura</button>
+      <button type="button" class="portal-tab" data-section="portalHistorial">Mi historial</button>
+      <button type="button" class="portal-tab" data-section="portalPerfil">Mis datos</button>
+    </nav>
+    <p id="portalEstado" class="portal-notice portal-error" role="alert" hidden></p>
+
+    <section id="portalNueva" class="portal-section active" aria-labelledby="portalNuevaTitulo">
+      <div class="portal-hero"><p class="portal-eyebrow">Facturación por compra</p><h1 id="portalNuevaTitulo">Genera tu factura</h1><p>Busca el pedido que deseas facturar. Usa el correo confirmado con el que hiciste la compra. Si tu pedido solo tiene teléfono, solicita apoyo a Noventia.</p></div>
+      <div class="card">
+        <label for="portalFolio">Folio o ID del pedido</label>
+        <div class="inline portal-order-search"><input id="portalFolio" placeholder="NV-, BAZ-, ALM-, ORD- o ID numérico" autocomplete="off"><button id="portalBuscar" type="button" disabled>Buscar pedido</button></div>
+        <p id="portalFacturaMensaje" class="form-message" role="status" aria-live="polite"></p>
+        <div id="portalPedido" hidden>
+          <div class="order-found"><div><small>Pedido</small><strong id="portalPedidoFolio">—</strong></div><div><small>Cliente</small><strong id="portalPedidoCliente">—</strong></div><div><small>Total de la compra</small><strong id="portalPedidoTotal">—</strong></div></div>
+          <div id="portalProductos" class="portal-products"></div>
+          <h2>Datos para esta factura</h2>
+          <dl id="portalResumenFiscal" class="portal-fiscal-summary"></dl>
+          <button id="portalEditarDatos" class="ghost" type="button">Editar mis datos</button>
+          <div class="portal-payment">
+            <label>Forma de pago<select id="portalForma"><option value="">Selecciona la forma de pago</option><option value="01">01 - Efectivo</option><option value="03">03 - Transferencia</option><option value="04">04 - Tarjeta de crédito</option><option value="28">28 - Tarjeta de débito</option></select></label>
+            <label>Método de pago<select id="portalMetodo"><option value="PUE">PUE - Una sola exhibición</option><option value="PPD">PPD - Parcialidades o diferido</option></select></label>
+          </div>
+          <p class="portal-help">Confirma los datos del receptor y la forma de pago antes de generar tu factura.</p>
+          <button id="portalGenerar" type="button">Generar factura</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="portalHistorial" class="portal-section" aria-labelledby="portalHistorialTitulo">
+      <div class="bar portal-history-heading"><div><p class="portal-eyebrow">Tus compras, en un solo lugar</p><h1 id="portalHistorialTitulo">Mis solicitudes y facturas</h1><p>Consulta el avance de cada compra y descarga sus documentos disponibles.</p></div><button id="portalRecargarHistorial" type="button" class="ghost">Actualizar</button></div>
+      <div class="portal-summary" aria-label="Resumen de mi historial">
+        <div><span>Total de solicitudes</span><strong id="portalCountTotal">0</strong></div>
+        <div><span>En revisión</span><strong id="portalCountPendientes">0</strong></div>
+        <div><span>Con documentos</span><strong id="portalCountDocumentos">0</strong></div>
+      </div>
+      <div class="card portal-history-controls">
+        <label>Buscar<input id="portalHistorialBuscar" type="search" placeholder="Folio de factura o pedido" autocomplete="off"></label>
+        <label>Estado<select id="portalHistorialEstado"><option value="">Todos los estados</option><option value="PENDIENTE">En revisión</option><option value="DISPONIBLE">Emitidas</option><option value="CANCELADA">Canceladas</option></select></label>
+        <button id="portalLimpiarFiltros" class="ghost" type="button">Limpiar filtros</button>
+      </div>
+      <p id="portalHistorialMensaje" class="form-message" role="status" aria-live="polite"></p>
+      <div id="portalHistorialLista" class="portal-history"></div>
+      <div id="portalPaginacion" class="portal-pagination" hidden><button id="portalAnterior" class="ghost" type="button">Anterior</button><span id="portalPagina" aria-live="polite"></span><button id="portalSiguiente" class="ghost" type="button">Siguiente</button></div>
+    </section>
+
+    <section id="portalPerfil" class="portal-section" aria-labelledby="portalPerfilTitulo">
+      <div class="portal-hero"><p class="portal-eyebrow">Datos del receptor</p><h1 id="portalPerfilTitulo">Mis datos</h1><p>Estos datos se cargarán en tu próxima factura.</p></div>
+      <form id="portalPerfilForm" class="card">
+        <div class="grid">
+          <label>Nombre de contacto<input id="portalContacto" required autocomplete="name"></label>
+          <label>Tipo de persona<select id="portalTipo"><option value="FISICA">Persona física</option><option value="MORAL">Persona moral</option></select></label>
+          <label>Nombre / Razón social<input id="portalRazon" required autocomplete="organization"></label>
+          <label>RFC<input id="portalRfc" maxlength="13" required></label>
+          <label>Código postal fiscal<input id="portalCp" inputmode="numeric" maxlength="5" pattern="[0-9]{5}" required></label>
+          <label>Régimen fiscal<select id="portalRegimen" required></select></label>
+          <label>Uso CFDI<select id="portalUso"><option value="G01">G01 - Adquisición de mercancías</option><option value="G03">G03 - Gastos en general</option><option value="S01">S01 - Sin efectos fiscales</option><option value="CP01">CP01 - Pagos</option></select></label>
+          <label>Correo de tu cuenta<input id="portalPerfilEmail" type="email" disabled></label>
+          <label>Teléfono<input id="portalTelefono" type="tel" required autocomplete="tel"></label>
+        </div>
+        <button id="portalGuardarPerfil" type="submit">Guardar mis datos</button><p id="portalPerfilMensaje" class="form-message" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+    <footer class="portal-footer">Noventia · Portal de facturación</footer>
+  </main>
+
+  <div id="portalLoader" class="global-loader" role="status" aria-live="polite" hidden><div class="loader-spinner" aria-hidden="true"></div><strong id="portalLoaderText">Cargando…</strong></div>
+
+  <dialog id="portalDetalle" class="portal-dialog" aria-labelledby="portalDetalleTitulo">
+    <div class="portal-dialog-heading"><div><p class="portal-eyebrow">Detalle de tu solicitud</p><h2 id="portalDetalleTitulo">Factura</h2></div><button id="portalCerrarDetalle" type="button" class="ghost" aria-label="Cerrar detalle">Cerrar</button></div>
+    <div id="portalDetalleContenido"></div>
+    <p id="portalDetalleMensaje" class="form-message" role="status" aria-live="polite"></p>
+  </dialog>
+
+  <dialog id="portalExito" class="portal-dialog portal-success-dialog" aria-labelledby="portalExitoTitulo">
+    <div class="success-icon" aria-hidden="true">✓</div><h2 id="portalExitoTitulo">Recibimos tu solicitud</h2>
+    <p id="portalResultadoMensaje"></p><div class="success-folio"><span>Folio de seguimiento</span><strong id="portalExitoFolio">—</strong></div>
+    <div class="success-actions"><button id="portalOtra" type="button" class="ghost">Generar otra factura</button><button id="portalVerHistorial" type="button">Ver historial</button></div>
+  </dialog>
+  <script type="module" src="/portal.js?v=1.20.0"></script>
+</body>
+</html>

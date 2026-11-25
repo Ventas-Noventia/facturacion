@@ -1,0 +1,22 @@
+NOVENTIA · versión 1.18.0
+
+Producción con Facturama: sigue FACTURAMA_PRODUCCION.md. Instalar conserva tu .env y no activa emisiones. No sustituyas tus variables existentes por el archivo de ejemplo.
+
+CORRECCION ACUMULADA NOVENTIA v1.17.6
+
+Corrige can is not defined en el historial al mostrar facturas canceladas.
+
+1. Detén el servidor con Ctrl+C.
+2. Descomprime el ZIP y copia instalar-noventia-v1.17.6.mjs junto a package.json.
+3. Desde tu proyecto ejecuta:
+   node ./instalar-noventia-v1.17.6.mjs .
+   npm start
+4. Confirma v1.17.6 y recarga con Cmd+Shift+R.
+5. Abre Historial y revisa la factura existente. Si está Cancelada · prueba,
+   puedes descargar Acuse PDF. Para un estado pendiente, usa Consultar cancelación.
+
+El cambio corrige la pantalla y sus permisos. No solicita otra cancelación,
+no emite comprobantes ni cambia el estado guardado de ninguna factura al instalar.
+El instalador respalda código y conserva .env, credenciales, datos y documentos.
+No requiere SQL nuevo ni npm install. El paquete es acumulativo desde 1.15.2.
+La activación de producción continúa pendiente; se conserva el modo Sandbox.

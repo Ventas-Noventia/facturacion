@@ -1,0 +1,78 @@
+{
+  "caso": "11-completa-sin-orden",
+  "prueba": "Solicitud completa sin OrderNumber",
+  "estado": "CONFIRMADO",
+  "solicitud": {
+    "Date": "2026-10-29T16:34:31",
+    "Folio": "dd1e35da0a774bf1b207bc86995fcb16",
+    "Items": [
+      {
+        "Unit": "Pieza",
+        "Taxes": [
+          {
+            "Base": 130,
+            "Name": "IVA",
+            "Rate": 0.16,
+            "Total": 20.8,
+            "IsRetention": false
+          }
+        ],
+        "Total": 150.8,
+        "Quantity": 1,
+        "Subtotal": 130,
+        "UnitCode": "H87",
+        "TaxObject": "02",
+        "UnitPrice": 130,
+        "Description": "Este producto es el juego de mesa Dobble Pokémon (también conocido como Spot It! en algunas regiones)_x000D_\nEl juego consiste en un mazo de 55 cartas, cada una con ocho símbolos de Pokémon, donde siempre hay un símbolo coincidente entre cualquier par de cartas_x000D_\nViene en una caja de hojalata temática y está diseñado para mejorar la agilidad visual y la rapidez mental.",
+        "ProductCode": "01010101",
+        "IdentificationNumber": "0508202640"
+      },
+      {
+        "Unit": "Unidad de servicio",
+        "Taxes": [
+          {
+            "Base": 74.137931,
+            "Name": "IVA",
+            "Rate": 0.16,
+            "Total": 11.862069,
+            "IsRetention": false
+          }
+        ],
+        "Total": 86,
+        "Quantity": 1,
+        "Subtotal": 74.137931,
+        "UnitCode": "E48",
+        "TaxObject": "02",
+        "UnitPrice": 74.137931,
+        "Description": "Envío del pedido",
+        "ProductCode": "01010101",
+        "IdentificationNumber": "ENVIO"
+      }
+    ],
+    "Serie": "NVSB",
+    "Issuer": {
+      "Rfc": "EKU9003173C9",
+      "Name": "ESCUELA KEMPER URGATE",
+      "FiscalRegime": "601"
+    },
+    "NameId": "1",
+    "CfdiType": "I",
+    "Currency": "MXN",
+    "Receiver": {
+      "Rfc": "URE180429TM6",
+      "Name": "UNIVERSIDAD ROBOTICA ESPAÑOLA",
+      "CfdiUse": "G03",
+      "TaxZipCode": "86991",
+      "FiscalRegime": "601"
+    },
+    "Exportation": "01",
+    "PaymentForm": "03",
+    "Observations": "PRUEBA SANDBOX SIN VALIDEZ FISCAL. Referencia interna: NOV-FAC-000018. Emisor y receptor de pruebas.",
+    "PaymentMethod": "PUE",
+    "ExpeditionPlace": "42501"
+  },
+  "huella": "acd841dbf3c0540fb7b1ac3f97577f5223bf8cd0c8c7a62ffadcce281b690bbf",
+  "fase": "VALIDACION",
+  "Id": "Urdcejgw-Eqw9s4Xkuwc7w2",
+  "UUID": "FD2BFC48-9DE1-4D3C-A491-6233CB67FE67"
+}

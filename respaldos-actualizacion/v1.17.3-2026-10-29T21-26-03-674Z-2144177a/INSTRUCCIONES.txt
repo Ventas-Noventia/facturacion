@@ -1,0 +1,23 @@
+ACTUALIZACION ACUMULADA NOVENTIA v1.17.3
+
+1. Detén el servidor con Ctrl+C.
+2. Copia instalar-noventia-v1.17.3.mjs junto a package.json en tu proyecto existente.
+3. Desde esa carpeta ejecuta:
+   node ./instalar-noventia-v1.17.3.mjs .
+   npm start
+4. Confirma v1.17.3 y facturama_sandbox. Recarga con Cmd+Shift+R.
+5. En Historial, ubica la MISMA factura pendiente y pulsa Reintentar envío original.
+6. Si se confirma el UUID, descarga XML y PDF; si faltan, usa Recuperar documentos.
+7. Si vuelve a fallar, conserva el registro y comparte el mensaje completo.
+
+El reintento consulta primero Facturama. Si ya hay un comprobante, lo recupera.
+Solo si la consulta no devuelve resultados y la venta sigue siendo facturable,
+reenvía la solicitud guardada con el mismo folio, fecha e importes. No crea un
+borrador nuevo ni restablece el registro pendiente. La causa del HTTP 500 original
+requiere confirmarse con el resultado del proveedor.
+
+El instalador respalda el código anterior y conserva .env, credenciales, datos,
+documentos, node_modules y archivos ajenos al manifiesto. No requiere SQL ni
+npm install. No emite facturas ni accede a cuentas externas al instalar.
+El paquete es acumulativo desde la versión 1.15.2. La carpeta del proyecto puede
+conservar su nombre anterior. Consulta FACTURAMA_SANDBOX.md para más detalles.

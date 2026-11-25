@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Facturación</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="appShell" class="shell" hidden>
+  <button type="button" id="btnView" class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <div id="menuBackdrop" class="menu-backdrop" hidden></div>
+
+  <aside>
+    <div class="img-logo">
+      <img src="img/logo2.png"/>
+    </div>
+    <div class="btn-nav">
+      <button class="nav active" data-v="nueva">Nueva factura</button>
+      <button class="nav" data-v="historial">Historial</button>
+      <button class="nav" data-v="clientes">Clientes fiscales</button>
+      <button class="nav" data-v="usuarios">Usuarios</button>
+      <button class="nav" data-v="reportes">Reportes</button>
+      <button class="nav" data-v="auditoria">Bitácora</button>
+      <button class="nav" data-v="config">Configuración</button>
+    </div>
+
+    <div class="account-box">
+      <div class="item-name">
+          <strong id="usuarioActual">Usuario</strong>
+          <small id="rolActual">—</small>
+      </div>
+      <button id="btnCerrarSesion" type="button" class="logout-button" aria-label="Cerrar sesión" title="Cerrar sesión"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+    <!-- <small>PAC simulado</small> -->
+  </aside>
+
+  <main>
+    <p id="timbradoAviso" class="sandbox-notice" role="status" hidden></p>
+    <section id="nueva" class="view active">
+      <h2>Nueva factura</h2>
+      <div class="card">
+        <div class="inline">
+          <input id="buscarFolio" placeholder="WA-000123 / WEB-000101">
+          <button id="btnBuscarPedido" type="button">Buscar pedido</button>
+        </div>
+
+        <div id="edicionBorradorAviso" class="draft-edit-banner" hidden>
+          <div><small>Editando borrador</small><strong id="edicionBorradorFolio">—</strong></div>
+          <button id="btnCancelarEdicion" type="button" class="ghost">Cancelar edición</button>
+        </div>
+
+        <form id="form">
+          <div class="grid">
+            <label>Origen
+              <select id="origen">
+                <option>WHATSAPP</option><option>ALMACEN</option><option>BAZAR</option><option>ECOMMERCE</option><option>MANUAL</option>
+              </select>
+            </label>
+            <label>Folio<input id="folio"></label>
+            <label>Tipo de persona
+              <select id="tipoPersona">
+                <option value="FISICA">Persona física</option>
+                <option value="MORAL">Persona moral</option>
+              </select>
+            </label>
+            <label>Nombre / Razón social
+              <div class="inline compact">
+                <input id="razon" value="PUBLICO EN GENERAL">
+                <button id="buscarFiscalFactura" type="button" class="ghost">Buscar fiscal</button>
+              </div>
+            </label>
+            <label>RFC<input id="rfc" value="" placeholder="XAXX010101000"></label>
+            <label>CP fiscal<input id="cp" placeholder="54700" value=""></label>
+            <label>Régimen fiscal<select id="regimen"></select></label>
+            <label>Uso CFDI
+              <select id="uso">
+                <option value="S01">S01 - Sin efectos fiscales</option>
+                <option value="G03">G03 - Gastos en general</option>
+              </select>
+            </label>
+            <label>Correo<input id="email" type="email"></label>
+            <label>Forma de pago
+              <select id="formaPago">
+                <option value="01">01 - Efectivo</option>
+                <option value="03" selected>03 - Transferencia</option>
+                <option value="04">04 - Tarjeta crédito</option>
+                <option value="28">28 - Tarjeta débito</option>
+                <option value="99">99 - Por definir</option>
+              </select>
+            </label>
+            <label>Método de pago
+              <select id="metodoPago">
+                <option value="PUE">PUE - Pago en una sola exhibición</option>
+                <option value="PPD">PPD - Pago en parcialidades o diferido</option>
+              </select>
+            </label>
+
+            <label>IVA<input value="16%" disabled aria-label="IVA fijo del 16 por ciento"></label>
+
+          </div>
+
+          <div class="bar">
+            <h3>Conceptos</h3>
+            <button id="add" type="button" class="ghost">+ Agregar manualmente</button>
+          </div>
+          <div id="conceptos"></div>
+          <div id="totales" class="stats"></div>
+          <div class="saveFactura">
+            <button id="btnGuardarFactura">Guardar borrador</button>
+          </div>
+          <p id="mensaje" role="alert" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="historial" class="view">
+      <h2>Historial de facturas</h2>
+      <div class="card">
+        <div class="history-filters">
+          <label class="history-search">Buscar<input id="buscarHistorial" placeholder="Pedido, factura, cliente o RFC"></label>
+          <label>Desde<input id="historialDesde" type="date"></label>
+          <label>Hasta<input id="historialHasta" type="date"></label>
+          <label>Origen<select id="historialOrigen"><option value="">Todos</option><option value="WHATSAPP">WhatsApp</option><option value="ALMACEN">Almacén</option><option value="BAZAR">Bazar</option><option value="ECOMMERCE">E-commerce</option><option value="MANUAL">Manual</option></select></label>
+          <label>Estado<select id="historialEstatus"><option value="">Todos</option><option value="BORRADOR">Borrador</option><option value="TIMBRADA_SANDBOX">Facturama Sandbox</option><option value="TIMBRANDO_SANDBOX">Consultando Sandbox</option><option value="REVISION_SANDBOX">Resultado por confirmar</option><option value="TIMBRADA_MOCK">Timbrada mock</option><option value="TIMBRADA">Timbrada</option><option value="CANCELADA_MOCK">Cancelada mock</option></select></label>
+          <label>Firebase<select id="historialSync"><option value="">Todos</option><option value="SINCRONIZADO">Sincronizado</option><option value="LIBERADO">Liberado por cancelación</option><option value="ERROR">Con error</option><option value="PENDIENTE">Pendiente</option><option value="NO_APLICA">No aplica</option></select></label>
+          <button id="limpiarFiltrosHistorial" type="button" class="ghost">Limpiar</button>
+          <button id="exportarHistorial" type="button" class="export-report"><i class="fa-solid fa-file-excel"></i> Exportar</button>
+        </div>
+        <p id="historialResumen" class="history-summary"></p>
+        <div id="historialTabla"></div>
+        <div id="historialPaginacion" class="audit-pagination"></div>
+      </div>
+    </section>
+
+    <section id="clientes" class="view">
+      <h2>Clientes fiscales</h2>
+      <div class="card split">
+         <form id="clienteFiscalForm">
+          <label>Tipo de persona
+            <select id="cfTipoPersona"><option value="FISICA">Persona física</option><option value="MORAL">Persona moral</option></select>
+          </label>
+          <label>Nombre / Razón social<input id="cfRazon"></label>
+          <label>RFC<input id="cfRfc"></label>
+          <label>CP fiscal<input id="cfCp"></label>
+          <label>Régimen fiscal<select id="cfRegimen"></select></label>
+          <label>Uso CFDI
+            <select id="cfUso"><option value="G03">G03 - Gastos en general</option><option value="S01">S01 - Sin efectos fiscales</option></select>
+          </label>
+          <label>Correo<input id="cfEmail" type="email"></label>
+          <div class="saveFactura item-client">
+            <button class="btn-save-client">Guardar cliente</button>
+          </div>
+          <p id="clienteFiscalMensaje"></p>
+        </form>
+        <div>
+          <div class="inline">
+            <input id="buscarClienteFiscal" placeholder="RFC, nombre o correo">
+            <button id="btnBuscarClienteFiscal" type="button" class="ghost">Buscar</button>
+          </div>
+          <div id="clientesLista"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="usuarios" class="view">
+      <h2>Usuarios</h2>
+      <div class="card">
+        <p>Usuarios autorizados en Supabase Authentication.</p>
+        <div id="usuariosLista"></div>
+      </div>
+    </section>
+
+    <section id="reportes" class="view">
+      <h2>Reportes</h2>
+      <div class="card report-filter-card">
+        <div class="report-filters">
+          <label>Desde<input id="reporteDesde" type="date"></label>
+          <label>Hasta<input id="reporteHasta" type="date"></label>
+          <label>Origen<select id="reporteFiltroOrigen"><option value="">Todos</option><option value="WHATSAPP">WhatsApp</option><option value="ALMACEN">Almacén</option><option value="BAZAR">Bazar</option><option value="ECOMMERCE">E-commerce</option><option value="MANUAL">Manual</option></select></label>
+          <label>Estado<select id="reporteFiltroEstatus"><option value="">Todos</option><option value="BORRADOR">Borrador</option><option value="TIMBRADA_SANDBOX">Facturama Sandbox</option><option value="TIMBRANDO_SANDBOX">Consultando Sandbox</option><option value="REVISION_SANDBOX">Resultado por confirmar</option><option value="TIMBRADA_MOCK">Timbrada mock</option><option value="TIMBRADA">Timbrada</option><option value="CANCELADA_MOCK">Cancelada mock</option></select></label>
+          <button id="btnAplicarReporte" type="button">Aplicar</button>
+          <button id="btnLimpiarReporte" type="button" class="ghost">Limpiar</button>
+          <button id="btnExportarReporte" type="button" class="export-report"><i class="fa-solid fa-file-excel"></i> Descargar CSV</button>
+        </div>
+        <p id="reportePeriodo" class="history-summary"></p>
+      </div>
+      <div id="reporteCards" class="stats"></div>
+      <div class="report-grid">
+        <div class="card"><h3>Facturas por origen</h3><div id="reporteOrigen"></div></div>
+        <div class="card"><h3>Facturas por estado</h3><div id="reporteEstatus"></div></div>
+      </div>
+      <div class="card report-detail-card"><div class="bar"><div><h3>Detalle del periodo</h3><small>Los indicadores fiscales consideran solamente facturas timbradas.</small></div></div><div id="reporteDetalle"></div></div>
+    </section>
+
+    <section id="auditoria" class="view">
+      <h2>Bitácora de facturación</h2>
+      <div class="card">
+        <div class="audit-filters">
+          <label class="audit-search">Buscar<input id="buscarAuditoria" placeholder="Factura, pedido o usuario"></label>
+          <label>Movimiento<select id="auditoriaAccion"><option value="">Todos</option><option value="CREACION">Creación</option><option value="EDICION">Edición</option><option value="TIMBRADO">Timbrado</option><option value="RECUPERACION_SANDBOX">Consulta Sandbox</option><option value="REINTENTO_SANDBOX">Reintento Sandbox</option><option value="CANCELACION">Cancelación</option><option value="ELIMINACION">Eliminación</option><option value="DESCARGA_DOCUMENTO">Descarga</option><option value="SINCRONIZACION_FIREBASE">Sincronización Firebase</option></select></label>
+          <label>Desde<input id="auditoriaDesde" type="date"></label>
+          <label>Hasta<input id="auditoriaHasta" type="date"></label>
+          <button id="btnBuscarAuditoria" type="button">Consultar</button>
+          <button id="btnLimpiarAuditoria" type="button" class="ghost">Limpiar</button>
+        </div>
+        <p id="auditoriaResumen" class="history-summary"></p>
+        <div id="auditoriaTabla"></div>
+        <div id="auditoriaPaginacion" class="audit-pagination"></div>
+      </div>
+    </section>
+
+    <section id="config" class="view">
+      <h2>Configuración fiscal</h2>
+      <form id="configFiscalForm" class="card">
+        <p>Configura los datos del emisor. No ingreses certificados ni contraseñas en esta sección.</p>
+        <div class="fiscal-readiness">
+          <strong>Preparación para facturación real</strong>
+          <span class="status-pill status-pending">Pendiente de certificados y PAC</span>
+          <small>Mientras tanto, los documentos se generan claramente identificados como pruebas sin valor fiscal.</small>
+        </div>
+        <div class="grid">
+          <label>Razón social<input id="cfgRazon" required></label>
+          <label>Nombre comercial<input id="cfgNombreComercial" placeholder="NOVENTIA"></label>
+          <label>RFC<input id="cfgRfc" maxlength="13" required></label>
+          <label>Régimen fiscal<select id="cfgRegimen" required><option value="601">601 - General de Ley Personas Morales</option><option value="603">603 - Personas Morales con Fines no Lucrativos</option><option value="605">605 - Sueldos y Salarios</option><option value="606">606 - Arrendamiento</option><option value="612">612 - Personas Físicas con Actividades Empresariales</option><option value="616">616 - Sin obligaciones fiscales</option><option value="621">621 - Incorporación Fiscal</option><option value="625">625 - Actividades Empresariales vía Plataformas</option><option value="626">626 - Régimen Simplificado de Confianza</option></select></label>
+          <label>CP de expedición<input id="cfgCp" maxlength="5" required></label>
+          <label>Serie<input id="cfgSerie" value="F" maxlength="10" required></label>
+          <label>Correo público<input id="cfgCorreo" type="email" placeholder="facturacion@empresa.com"></label>
+          <label>Teléfono público<input id="cfgTelefono" maxlength="25"></label>
+          <label>Sitio web<input id="cfgSitioWeb" placeholder="https://empresa.com"></label>
+          <label>Versión CFDI<input value="4.0" disabled></label>
+          <label>Exportación<select id="cfgExportacion"><option value="01">01 - No aplica</option><option value="02">02 - Definitiva</option><option value="03">03 - Temporal</option><option value="04">04 - Definitiva con clave distinta de A1</option></select></label>
+          <label>Ambiente<select id="cfgAmbiente"><option value="PRUEBAS">Pruebas</option><option value="PRODUCCION">Producción</option></select></label>
+          <label>PAC<input id="cfgPac" value="PENDIENTE" readonly></label>
+        </div>
+        <div class="item-save-config">
+          <button id="btnGuardarConfig" type="submit">Guardar configuración</button>
+        </div>
+        <p id="configMensaje"></p>
+      </form>
+    </section>
+  </main>
+</div>
+
+<div id="globalLoader" class="global-loader" hidden role="status" aria-live="polite">
+  <div class="loader-spinner" aria-hidden="true"></div>
+  <strong id="globalLoaderText">Cargando…</strong>
+</div>
+
+<div id="privacidadModal" class="modal privacy-modal" hidden role="dialog" aria-modal="true" aria-labelledby="privacidadTitulo">
+  <div class="modal-backdrop"></div>
+  <div class="success-panel privacy-panel">
+    <p class="success-eyebrow">Tu información importa</p>
+    <h2 id="privacidadTitulo">Aviso de privacidad y cookies</h2>
+    <p>Utilizamos cookies esenciales para mantener tu sesión y proteger el sistema. Consulta nuestro <a href="/aviso-privacidad.html" target="_blank" rel="noopener">aviso de privacidad</a>.</p>
+    <label class="consent-check"><input id="aceptoPrivacidad" type="checkbox"> He leído y acepto el aviso de privacidad y el uso de cookies esenciales.</label>
+    <p id="privacidadMensaje" class="form-message"></p>
+    <div class="success-actions"><button id="btnRechazarPrivacidad" type="button" class="ghost">No aceptar</button><button id="btnAceptarPrivacidad" type="button">Aceptar y continuar</button></div>
+  </div>
+</div>
+
+<div id="exitoModal" class="modal success-modal" hidden role="dialog" aria-modal="true" aria-labelledby="exitoTitulo">
+  <div id="exitoBackdrop" class="modal-backdrop"></div>
+  <div class="success-panel">
+    <div class="success-icon" aria-hidden="true">✓</div>
+    <p class="success-eyebrow">Registro completado</p>
+    <h2 id="exitoTitulo">Factura generada exitosamente</h2>
+    <p>La información se guardó correctamente y el formulario está listo para una nueva factura.</p>
+    <div class="success-folio">
+      <span>Folio de seguimiento</span>
+      <strong id="exitoFolio">—</strong>
+    </div>
+    <div class="success-summary">
+      <div><span>Cliente</span><strong id="exitoCliente">—</strong></div>
+      <div><span>Total</span><strong id="exitoTotal">—</strong></div>
+    </div>
+    <div class="success-actions">
+      <button id="btnVerFacturaCreada" type="button" class="ghost">Ver factura</button>
+      <button id="btnNuevaFactura" type="button">Generar otra factura</button>
+    </div>
+  </div>
+</div>
+<script type="module" src="app.js"></script>
+
+<div id="pedidoFacturadoModal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="pedidoFacturadoTitulo">
+  <div id="pedidoFacturadoBackdrop" class="modal-backdrop"></div>
+  <div class="success-panel duplicate-panel">
+    <div class="duplicate-icon" aria-hidden="true">!</div>
+    <p class="success-eyebrow duplicate-eyebrow">Pedido procesado</p>
+    <h2 id="pedidoFacturadoTitulo">Este pedido ya fue facturado</h2>
+    <p>No es posible generar una segunda factura para el mismo pedido.</p>
+    <div class="success-folio">
+      <span>Pedido</span>
+      <strong id="pedidoFacturadoOrigen">—</strong>
+    </div>
+    <div class="success-folio">
+      <span>Factura vinculada</span>
+      <strong id="pedidoFacturadoFolio">—</strong>
+    </div>
+    <div class="success-actions">
+      <button id="btnCerrarPedidoFacturado" type="button" class="ghost">Cerrar</button>
+      <button id="btnVerPedidoFacturado" type="button">Ver factura</button>
+    </div>
+  </div>
+</div>
+
+<div id="eliminarBorradorModal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="eliminarBorradorTitulo">
+  <div id="eliminarBorradorBackdrop" class="modal-backdrop"></div>
+  <div class="success-panel delete-draft-panel">
+    <div class="delete-draft-icon" aria-hidden="true"><i class="fa-solid fa-trash-can"></i></div>
+    <p class="success-eyebrow delete-draft-eyebrow">Acción permanente</p>
+    <h2 id="eliminarBorradorTitulo">¿Eliminar este borrador?</h2>
+    <p>La factura se quitará del historial. Si proviene de Firebase, el pedido volverá a quedar disponible para facturarse.</p>
+    <div class="success-folio"><span>Factura</span><strong id="eliminarBorradorFolio">—</strong></div>
+    <div class="success-actions">
+      <button id="btnCancelarEliminarBorrador" type="button" class="ghost">Conservar borrador</button>
+      <button id="btnConfirmarEliminarBorrador" type="button" class="danger">Sí, eliminar</button>
+    </div>
+  </div>
+</div>
+
+<div id="auditoriaTimelineModal" class="modal audit-drawer-modal" hidden role="dialog" aria-modal="true" aria-labelledby="auditoriaTimelineTitulo">
+  <div id="auditoriaTimelineBackdrop" class="modal-backdrop"></div>
+  <div class="audit-drawer">
+    <div class="audit-drawer-header">
+      <div><p class="success-eyebrow">Historial de movimientos</p><h2 id="auditoriaTimelineTitulo">Línea de tiempo</h2><span id="auditoriaTimelinePedido"></span></div>
+      <button id="btnCerrarAuditoriaTimeline" type="button" class="ghost" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="auditoriaTimeline" class="audit-timeline"></div>
+  </div>
+</div>
+
+<div id="cancelarFacturaModal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="cancelarFacturaTitulo">
+  <div id="cancelarFacturaBackdrop" class="modal-backdrop"></div>
+  <form id="cancelarFacturaForm" class="success-panel cancel-invoice-panel">
+    <div class="cancel-invoice-icon"><i class="fa-solid fa-ban"></i></div>
+    <p class="success-eyebrow cancel-invoice-eyebrow">Cancelación administrativa</p>
+    <h2 id="cancelarFacturaTitulo">Cancelar factura</h2>
+    <p>La factura conservará sus documentos como evidencia y el pedido quedará disponible para refacturación.</p>
+    <div class="success-folio"><span>Factura</span><strong id="cancelarFacturaFolio">—</strong></div>
+    <label>Motivo SAT
+      <select id="cancelarFacturaMotivo" required>
+        <option value="">Selecciona un motivo</option>
+        <option value="01">01 - Comprobante emitido con errores con relación</option>
+        <option value="02">02 - Comprobante emitido con errores sin relación</option>
+        <option value="03">03 - No se llevó a cabo la operación</option>
+        <option value="04">04 - Operación nominativa relacionada en factura global</option>
+      </select>
+    </label>
+    <label id="cancelarUuidGrupo" hidden>UUID de la factura sustituta<input id="cancelarUuidSustitucion" placeholder="UUID requerido para motivo 01"></label>
+    <label>Comentario interno<textarea id="cancelarFacturaComentario" rows="3" maxlength="300" placeholder="Opcional"></textarea></label>
+    <p id="cancelarFacturaMensaje" class="form-message"></p>
+    <div class="success-actions"><button id="btnCerrarCancelarFactura" type="button" class="ghost">Regresar</button><button id="btnConfirmarCancelarFactura" type="submit" class="danger">Confirmar cancelación</button></div>
+  </form>
+</div>
+
+<div id="facturaModal" class="modal" hidden>
+  <div id="facturaBackdrop" class="modal-backdrop"></div>
+  <div class="modal-panel">
+    <div class="modal-toolbar no-print">
+      <button id="btnCerrarFactura" type="button" class="ghost">Cerrar</button>
+      <div class="modal-actions">
+        <button id="btnXmlPreview" type="button" class="ghost">XML</button>
+        <button id="btnImprimirFactura" type="button">Imprimir / Guardar PDF</button>
+      </div>
+    </div>
+    <article id="facturaPrint" class="invoice-print">
+      <div id="pvCancelada" class="invoice-cancelled" hidden>FACTURA CANCELADA <small id="pvCanceladaDetalle"></small></div>
+      <header class="invoice-header">
+        <div>
+          <div class="invoice-brand">NOVENTIA</div>
+          <div class="invoice-emisor">
+            <strong>EMPRESA DE PRUEBA SA DE CV</strong><br>
+            RFC: AAA010101AAA<br>
+            Régimen fiscal: 601<br>
+            Lugar de expedición: 54700
+          </div>
+        </div>
+        <div class="invoice-titlebox">
+          <div class="invoice-title">FACTURA</div>
+          <div>Serie: <strong>F</strong></div>
+          <div>Folio: <strong id="pvFolio">-</strong></div>
+          <div>Fecha: <strong id="pvFecha">-</strong></div>
+          <p id="pvSandbox" class="sandbox-notice" hidden>Facturama Sandbox · Sin validez fiscal. El XML y PDF usan emisor EKU9003173C9 y receptor URE180429TM6 de prueba. Esta vista conserva los datos originales del pedido.</p>
+          <div>UUID: <strong id="pvUuid">PENDIENTE</strong></div>
+        </div>
+      </header>
+
+      <section class="invoice-section">
+        <h3>Datos del receptor</h3>
+        <div class="invoice-grid">
+          <div><span>Razón social</span><strong id="pvRazon">-</strong></div>
+          <div><span>RFC</span><strong id="pvRfc">-</strong></div>
+          <div><span>Código postal</span><strong id="pvCp">-</strong></div>
+          <div><span>Régimen fiscal</span><strong id="pvRegimen">-</strong></div>
+          <div><span>Uso CFDI</span><strong id="pvUso">-</strong></div>
+          <div><span>Correo</span><strong id="pvEmail">-</strong></div>
+        </div>
+      </section>
+
+      <section class="invoice-section">
+        <h3>Conceptos</h3>
+        <table class="invoice-table">
+          <thead>
+            <tr>
+              <th>Cant.</th><th>Clave</th><th>Descripción</th><th>Unidad</th><th>P. unitario</th><th>Importe</th>
+            </tr>
+          </thead>
+          <tbody id="pvConceptos"></tbody>
+        </table>
+      </section>
+
+      <section class="invoice-summary">
+        <div class="payment-data">
+          <div><span>Forma de pago</span><strong id="pvFormaPago">-</strong></div>
+          <div><span>Método de pago</span><strong id="pvMetodoPago">-</strong></div>
+          <div><span>Moneda</span><strong>MXN</strong></div>
+          <div><span>IVA</span><strong id="pvIvaEstado">-</strong></div>
+          <div><span>Origen</span><strong id="pvOrigen">-</strong></div>
+        </div>
+        <div class="totals-box">
+          <div><span>Subtotal</span><strong id="pvSubtotal">$0.00</strong></div>
+          <div><span>IVA</span><strong id="pvIva">$0.00</strong></div>
+          <div class="grand-total"><span>Total</span><strong id="pvTotal">$0.00</strong></div>
+        </div>
+      </section>
+
+      <section class="invoice-fiscal">
+        <div class="qr-placeholder"><strong>QR</strong><small>Se genera con PAC real</small></div>
+        <div class="fiscal-lines">
+          <div>No. certificado emisor: <strong>PENDIENTE</strong></div>
+          <div>No. certificado SAT: <strong>PENDIENTE</strong></div>
+          <div>Fecha certificación: <strong id="pvFechaTimbrado">PENDIENTE</strong></div>
+          <div>Sello CFDI: <code>PENDIENTE DE PAC REAL</code></div>
+          <div>Sello SAT: <code>PENDIENTE DE PAC REAL</code></div>
+          <div>Cadena original: <code>PENDIENTE DE PAC REAL</code></div>
+        </div>
+      </section>
+
+      <footer class="invoice-footer">Representación impresa de un CFDI · Entorno de pruebas</footer>
+    </article>
+  </div>
+</div>
+<script src="https://kit.fontawesome.com/702f509feb.js" crossorigin="anonymous"></script>
+</body>
+</html>

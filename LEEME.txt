@@ -1,0 +1,29 @@
+ACTUALIZACION ACUMULADA NOVENTIA v1.17.5
+
+1. Detén el servidor con Ctrl+C.
+2. Descomprime el ZIP y copia instalar-noventia-v1.17.5.mjs junto a package.json
+   en tu proyecto existente. El instalador contiene los archivos necesarios.
+3. Desde tu proyecto ejecuta:
+   node ./instalar-noventia-v1.17.5.mjs .
+   npm start
+4. Confirma v1.17.5 y facturama_sandbox. Recarga con Cmd+Shift+R.
+5. En Historial, usa Cancelar en Sandbox en un comprobante de prueba.
+   Indica el motivo. Para probar sin sustituto puede utilizarse el motivo 02.
+6. Si el resultado queda pendiente, usa Consultar cancelación. El pedido seguirá
+   bloqueado hasta confirmar la cancelación y completar su liberación.
+7. Al terminar, descarga Acuse PDF. Los XML/PDF originales se conservan.
+8. Volver a cargar pedido consulta de nuevo la venta y permite una nueva solicitud
+   si está disponible. Este botón no emite ni sustituye automáticamente un CFDI.
+
+El motivo 01 requiere el UUID de otro comprobante sustituto ya emitido. La emisión
+automática de sustitutos relacionados y la activación de producción quedan
+pendientes. Esta versión sigue usando exclusivamente Facturama Sandbox.
+
+El instalador respalda código y conserva .env, credenciales, datos, documentos,
+node_modules y archivos ajenos al manifiesto. No ejecuta SQL, no requiere
+npm install ni realiza cancelaciones o emisiones al instalarse. Es acumulativo
+desde 1.15.2; la carpeta del proyecto puede conservar su nombre anterior.
+
+Para una nueva solicitud de un pedido cancelado en Supabase debe estar aplicada
+la migración existente supabase/012_facturas_pedido_activo.sql. Si tu base aún
+conserva el índice anterior, aplica solo ese archivo; no repitas schema.sql.

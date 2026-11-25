@@ -1,9 +1,111 @@
-# Facturación dinámica V1.10
+# Versión operativa 1.19.4
+
+Consulta **PUESTA_EN_MARCHA_1_19.md** para catálogo SAT, correo, logo opcional, respaldo e instalación. El historial técnico que sigue contiene instrucciones de versiones anteriores; no ejecutes esos instaladores después de la actualización 1.19.4.
+
+NOVENTIA · versión 1.18.0
+
+Producción con Facturama: sigue FACTURAMA_PRODUCCION.md. Instalar conserva tu .env y no activa emisiones. No sustituyas tus variables existentes por el archivo de ejemplo.
+
+# Corrección 1.17.6 · historial después de cancelar
+
+Al mostrar una factura CANCELADA_SANDBOX, el botón Volver a cargar pedido llamaba a `can`, una función local de la carga de permisos que no existe en el renderizado del historial. La consulta de cancelación podía haberse completado, pero el navegador interrumpía la tabla con ReferenceError.
+
+El botón reutiliza el permiso de creación ya cargado en el dashboard. El mismo permiso protege su acción. Las pruebas ejecutan el frontend con facturas canceladas para administrador, usuario de consulta y cambios de permisos de sesión; verifican también que una cancelación pendiente conserve su consulta.
+
+Instala `instalar-noventia-v1.17.6.mjs` con `node ./instalar-noventia-v1.17.6.mjs .`, inicia con `npm start` y recarga con Cmd+Shift+R. Revisa el estado existente en Historial y descarga Acuse PDF si aparece Cancelada · prueba. Esta corrección no reenvía cancelaciones ni modifica las facturas o sus documentos. El instalador conserva .env y datos y no ejecuta SQL.
+
+# Actualización 1.17.5 · cancelación confirmada en Facturama Sandbox
+
+El historial permite solicitar la cancelación del comprobante de prueba y consultar su resultado. El servidor verifica el ID, UUID, emisor, receptor, folio, serie, fecha e importe del comprobante antes de enviar el DELETE al Sandbox. Guarda la solicitud de cancelación y reclama la revisión antes de enviarla; los errores o resultados pendientes conservan el bloqueo del pedido.
+
+Solo marca CANCELADA_SANDBOX después de consultar y verificar el estado cancelado en Facturama. Si la factura está vinculada con Firebase, mantiene el bloqueo de compra hasta liberar su marca mediante una transacción que comprueba el identificador de factura. Una consulta posterior puede completar esta liberación sin repetir el DELETE. Un rechazo definitivo mantiene vigente la factura y permite una nueva solicitud explícita con el motivo corregido.
+
+Se conservan el UUID y los XML/PDF originales. El acuse PDF se descarga desde Facturama mediante el backend autenticado. Recuperar documentos conserva el estado cancelado. El historial, el portal y los reportes muestran el estado de cancelación; el pedido queda disponible para otra solicitud únicamente al finalizar el proceso. **Volver a cargar pedido** consulta de nuevo su disponibilidad y sus importes actuales; no emite automáticamente.
+
+Instala `instalar-noventia-v1.17.5.mjs` con `node ./instalar-noventia-v1.17.5.mjs .` y ejecuta `npm start`. Después recarga el dashboard. El instalador conserva .env, credenciales, facturas, documentos y dependencias; no requiere SQL nuevo.
+
+Esta versión mantiene el emisor y receptor públicos de Sandbox. La activación de producción con los CSD reales y la emisión automática de CFDI sustitutos relacionados quedan pendientes. El motivo 01 solo se solicita con el UUID de otro comprobante sustituto ya emitido. No se convierten facturas de prueba en documentos fiscales reales.
+
+# Actualización 1.17.4 · compatibilidad de la referencia auxiliar en Sandbox
+
+Las pruebas de la cuenta confirmaron una solicitud completa al omitir `OrderNumber`, después de reproducir HTTP 500 al añadir ese campo con el UUID interno de la factura. Las nuevas emisiones omiten esta referencia opcional no fiscal. El pedido sigue vinculado en el dashboard y su referencia interna sigue en las observaciones; los conceptos, descuentos, envío e IVA se conservan.
+
+En Historial, una solicitud anterior pendiente que contiene `OrderNumber` muestra **Reintentar sin referencia auxiliar**. La acción reclama la revisión del registro, verifica la huella guardada y consulta el folio en Facturama. Si ya existe un comprobante verificable, recupera su UUID y archivos sin ajustar la solicitud ni emitir otra vez.
+
+Solo si la consulta no tiene ningún resultado y la venta sigue siendo elegible y con los mismos importes, guarda la solicitud anterior completa y su huella en `timbradoSandbox.ajusteReferencia`. Guarda también la nueva solicitud, que omite únicamente `OrderNumber`, antes de enviarla una vez. Conserva Folio, Date, Serie, conceptos, observaciones e importes. Las siguientes recuperaciones y reintentos verifican ambas solicitudes y que no haya otras diferencias. Un fallo conserva el respaldo y el envío ajustado; un ID o UUID recibido bloquea posteriores reenvíos.
+
+**Reintentar envío original** conserva su comportamiento para las solicitudes que ya omiten la referencia: consulta primero y, si corresponde, reenvía exactamente la solicitud guardada. **Consultar resultado** y **Recuperar documentos** siguen siendo consultas GET al proveedor.
+
+Instala `instalar-noventia-v1.17.4.mjs` con `node ./instalar-noventia-v1.17.4.mjs .`, inicia con `npm start` y recarga con Cmd+Shift+R. En la misma factura pendiente usa **Reintentar sin referencia auxiliar**. El instalador conserva .env, credenciales, datos y documentos; no requiere SQL ni dependencias nuevas y no emite comprobantes. El paquete es acumulativo desde 1.15.2. El diagnóstico independiente y su UUID no se asignan a la factura original.
+
+La corrección está limitada a Facturama Sandbox. La consulta previa, la verificación actual de la venta, los permisos, los bloqueos por revisión y el almacenamiento de ID antes de descargar archivos se mantienen. La base JSON local conserva su alcance de desarrollo con un proceso.
+
+# Corrección 1.17.2 · recuperación de timbrado en Supabase
+
+Se corrigió un conflicto falso al recuperar operaciones de Facturama Sandbox. PostgreSQL almacena `data` como `jsonb` y puede reordenar las claves de los objetos; el sistema anterior calculaba la huella según ese orden. La recuperación confundía el cambio de orden con un cambio de contenido.
+
+La nueva huella es independiente del orden de claves y mantiene significativo el contenido de cada campo y el orden de los conceptos. Las solicitudes enviadas por las versiones 1.17.0 y 1.17.1 se verifican reconstruyendo el formato anterior: no se omite la verificación ni se sustituyen huellas de solicitudes realmente modificadas.
+
+Después de instalar, usa **Historial → Consultar resultado** en el registro existente. Se conservan su folio, fecha y solicitud. La recuperación utiliza consultas; no vuelve a enviar una emisión. Si el proveedor no confirma un comprobante, el código `SANDBOX_RESULTADO_NO_CONFIRMADO` permite distinguir ese caso de un conflicto de integridad o de actualización concurrente. El HTTP 500 original de Facturama requiere comprobar su resultado y, si sigue pendiente, revisar HTTP Logs de la cuenta.
+
+Se verificó la compatibilidad con escrituras y lecturas JSONB reales en PostgreSQL 18.6 mediante PGlite 0.5.13 en un entorno aislado de pruebas. Esa herramienta no es una dependencia del proyecto y no utiliza tu base ni tus credenciales.
+
+La instalación conserva `.env`, credenciales, datos y documentos. Esta actualización no requiere SQL nuevo ni dependencias adicionales.
+
+# Corrección 1.17.2 · errores al guardar borradores
+
+Se corrigió el manejo de validaciones que antes devolvían HTTP 500 y se agregó diagnóstico seguro del guardado en Supabase. Un dato incompleto muestra ahora un mensaje de validación (HTTP 400). Un fallo de base de datos muestra un código y una referencia, sin exponer filas, credenciales ni respuestas SQL privadas. La causa del caso observado en tu servidor debe identificarse con el nuevo mensaje; el estado 500 por sí solo no la determina.
+
+El instalador conserva `.env`, credenciales, datos y documentos. No necesita SQL nuevo ni dependencias adicionales. Mantén activa tu configuración actual de Facturama Sandbox.
+
+# Actualización 1.17.2 · Facturama Sandbox
+
+El dashboard puede emitir comprobantes de prueba con Facturama Multiemisor v4 y recuperar sus documentos originales. La preparación de la cuenta y el CSD de pruebas debe haber concluido primero.
+
+Lee [FACTURAMA_SANDBOX.md](FACTURAMA_SANDBOX.md) para instalar, activar `TIMBRADO_PROVIDER=facturama_sandbox` y probar una compra. El modo predeterminado sigue siendo `mock`. La actualización conserva datos y credenciales y no necesita SQL nuevo ni nuevas dependencias.
+
+# Facturación dinámica V1.16.4
+
+Valida el flujo de una compra: consulta por ID o folio, importes históricos,
+guardado, timbrado de prueba y descarga privada de PDF/XML. Se agregan pruebas
+HTTP con API y Supabase simulados; no necesitan credenciales reales.
+
+Corrige el guardado local simultáneo, los mensajes de conflicto de Supabase y
+la validación de pedidos numéricos al crear la factura. Un doble clic no inicia
+dos operaciones sobre la misma factura dentro del mismo proceso del servidor.
+Cada intento mock guarda archivos locales propios para conservar documentos
+anteriores, incluso cuando un pedido tiene una factura cancelada.
+
+La protección entre instancias se completa con los índices de Supabase en
+`supabase/012_facturas_pedido_activo.sql`, previa revisión de duplicados. Este
+paquete no ha ejecutado SQL en tu proyecto. Consulta `INSTRUCCIONES.txt` y
+`VALIDACION_COMPRAS.md`; no vuelvas a ejecutar todo `schema.sql`.
+
+Se conserva el portal v1.16.3: historial, detalle y descargas de documentos
+propios, con estados claros y funcionamiento en celular. La solicitud del
+cliente guarda un borrador para revisión.
+
+El timbrado sigue siendo simulado. No se ha elegido ni conectado un proveedor
+real. No se han configurado certificados ni correo real. El IVA permanece en
+16% y las dos fuentes Firebase no cambian. Conserva la configuración de la API
+que ya te funciona.
+
+## PDF v1.16.2
+La versión 1.16.2 mejora el PDF: logotipo existente, nombres y descripciones con
+acentos, todos los productos en varias páginas, encabezados y numeración. El
+folio del pedido se conserva internamente y no se imprime. Los totales se toman
+de la factura guardada. Continúa siendo un documento de prueba sin timbre fiscal.
+
+Para aplicar únicamente esta mejora, consulta `INSTRUCCIONES.txt`.
+
+La integración del e-commerce con API real y las dos fuentes Firebase se
+describe en [INTEGRACION_API.md](INTEGRACION_API.md). Ahí están las variables
+de Render, la migración de Supabase y la comprobación de importes.
 
 Incluye menú lateral con Nueva factura, Historial, Usuarios, Reportes y Configuración.
 
 - Historial con búsqueda, timbrado mock y descarga XML/PDF simulados.
-- Usuarios locales de prueba con roles ADMIN, FACTURACION y CONSULTA.
+- Usuarios con Supabase Auth y perfiles ADMIN, FACTURACION y CONSULTA.
 - Reportes de total, timbradas, borradores, monto y origen.
 - Configuración fiscal del emisor como dato único.
 
