@@ -980,9 +980,10 @@ http.createServer(async (req, res) => {
 // Envío SMTP del PDF personalizado de Noventia
 async function prepararCorreoNoventia(factura, email) {
   validarEnvio(factura, email);
+  const archivoGmail = process.env.NOVENTIA_GMAIL_AUTH_FILE;
   const { SMTP_HOST: host, SMTP_USER: user, SMTP_PASS: pass } = process.env;
   const port = Number(process.env.SMTP_PORT || 465);
-  if (!host || !user || !pass || ![465, 587].includes(port)) {
+  if (!archivoGmail && (!host || !user || !pass || ![465, 587].includes(port))) {
     throw Object.assign(new Error('Configura SMTP_HOST, SMTP_PORT (465 o 587), SMTP_USER y SMTP_PASS para enviar desde Noventia.'), { statusCode: 503 });
   }
   const { default: nodemailer } = await import('nodemailer');
@@ -1005,13 +1006,15 @@ async function prepararCorreoNoventia(factura, email) {
     throw Object.assign(new Error('No se pudo preparar el PDF Noventia y el XML de este folio. Revisa los documentos timbrados. El correo sigue sin enviarse.'), { statusCode: 409 });
   }
   const folio = String(factura.folioInterno || factura.uuid).replace(/[^a-zA-Z0-9_-]/g, '_');
-  const transport = nodemailer.createTransport({
+  const transport = archivoGmail
+    ? await (await import('./services/gmail-api.mjs')).transporteGmail(nodemailer, archivoGmail)
+    : nodemailer.createTransport({
     host, port, secure: port === 465, requireTLS: true, auth: { user, pass },
     connectionTimeout: 15000, socketTimeout: 30000, disableFileAccess: true, disableUrlAccess: true
   });
   return async () => {
     const resultado = await transport.sendMail({
-      from: { name: 'Noventia', address: process.env.SMTP_FROM || user }, to: { address: email, name: '' },
+      from: { name: 'Noventia', address: archivoGmail ? 'factura.noventia@gmail.com' : process.env.SMTP_FROM || user }, to: { address: email, name: '' },
       subject: 'Factura Noventia ' + folio,
       text: 'Adjuntamos el PDF y el XML timbrado de tu factura ' + folio + '. Gracias por comprar en Noventia.',
       attachments: [
